@@ -5,7 +5,7 @@
 ;; **
 
 ;; **
-;;; This [Gorilla REPL](http://gorilla-repl.org) worksheet demonstrates basic features of the [Rock Paper Stuff](https://github.com/lspector/rock-paper-stuff) environment. If you scroll to the bottom you'll see a few graphs of tournaments that also demonstrate Gorilla REPL's graphing features.
+;;; This [Gorilla REPL](http://gorilla-repl.org) worksheet demonstrates basic features of the [Rock Paper Stuff](https://github.com/lspector/rock-paper-stuff) environment. If you scroll to the bottom you'll see a few graphs that also demonstrate Gorilla REPL's plotting features.
 ;;; 
 ;;; Here we define the namespace, pulling in names from some others:
 ;; **
