@@ -69,7 +69,7 @@ This will open a fresh worksheet, which you could work in and save... **But** th
 
 You'll see the evaluated worksheet, and you can click into any code cell and press `control-enter` to evaluate it again (possibly after changing it). This worksheet will walk you through basic interactions with the Rock Paper Stuff environment.
 
-To run games and tournaments from the terminal, put your in `user.clj` in the indicated places. Then typing `lein run` at the operating system command line will run that function and print the result to the terminal.
+To run games and tournaments from the terminal, put your code in `user.clj` in the indicated places. Then typing `lein run` at the operating system command line will run that function and print the result to the terminal.
 
 ## Acknowledgments
 
