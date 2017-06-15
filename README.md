@@ -73,7 +73,7 @@ To run games and tournaments from the terminal, put your code in `user.clj` in t
 
 ## Acknowledgments
 
-Based on ideas from conversations with:
+Based on ideas from conversations with members of the [Hampshire College Computational Intelligence Lab](http://sites.hampshire.edu/ci-lab/) and:
 
 - Clifford Bohm
 - Jim Kan
