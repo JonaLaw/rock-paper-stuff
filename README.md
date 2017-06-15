@@ -35,7 +35,7 @@ Although players can't see what each other are going to play before they choose 
 
 - If A plays Rock and B plays Scissors, then A gets Scissors and Fire, and B gets Rock (Rock sparks fire from Scissors)
 
-- If A plays Rock and B plays Fire, then A gets Fire and B gets Scissors (Fire smelts Rock into Scissors)
+- If A plays Rock and B plays Fire, then A gets Fire and B gets Scissors (Fire forges Rock into Scissors)
 
 - If A plays Rock and B plays Water, then A gets Rock and B gets two Water (Rock splashes back Water)
 
