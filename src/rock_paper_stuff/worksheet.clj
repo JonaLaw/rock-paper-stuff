@@ -5,7 +5,7 @@
 ;; **
 
 ;; **
-;;; This [Gorilla REPL](http://gorilla-repl.org) worksheet demonstrates basic features of the [Rock Paper Stuff](https://github.com/lspector/rock-paper-stuff) environment.
+;;; This [Gorilla REPL](http://gorilla-repl.org) worksheet demonstrates basic features of the [Rock Paper Stuff](https://github.com/lspector/rock-paper-stuff) environment. If you scroll to the bottom you'll see a few graphs of tournaments that also demonstrate Gorilla REPL's graphing features.
 ;;; 
 ;;; Here we define the namespace, pulling in names from some others:
 ;; **
@@ -21,9 +21,9 @@
 ;; <=
 
 ;; **
-;;; Here we play a game with two players who use the `random-pf` player function, which is defined (along with other player functions used in the examples below) in the `rock-paper-stuff.player-functions` namespace. 
+;;; Now let's play a game with two players who use the `random-pf` player function, which is defined (along with other player functions used in the examples below) in the `rock-paper-stuff.player-functions` namespace. 
 ;;; 
-;;; We'll see the full result, which is *big and messy* because it includes each player's full history. Don't worry about the details in this result now; just scroll past it to look at the examples that follow. We'll see nicer ways to print game results (or usually just parts of them) further below:
+;;; We'll see the full result, which is *big and messy* because it includes each player's full history, and it's printed in a way that's not intended for human consumption. Don't worry about the details in this result now; just scroll past it to look at the examples that follow. We'll see nicer ways to display game results (or usually just parts of them) further below:
 ;; **
 
 ;; @@
