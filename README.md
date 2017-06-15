@@ -25,7 +25,7 @@ Players start with as many of each of these as there are players. For example, i
 
 Players can play something even if they don't have it, but then they go into debt on that item.
 
-A player's score is the amount of water that it has at the end of the game, minus all of its debts. Each unit of debt costs one unit of Water in the final score tally, regardless of what it is a debt for.
+A player's score is the amount of Water that it has at the end of the game, minus all of its debts. Each unit of debt costs one unit of Water in the final score tally, regardless of what it is a debt for.
 
 The number of trades in a game is the number of possible pairings times 100. For a two-player game, this is 100 trades. For a three-player game, 300 trades. For a four-player game, 600 trades. In general, the number of trades is *100n(n-1)/2* where *n* is the number of players.
 
