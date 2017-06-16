@@ -4,6 +4,10 @@ Rock Paper Stuff
 
 By Lee Spector
 
+***This is work in progress. Expect changes.***
+
+***Check out the debt-free branch for a version in which one cannot go into debt, which may replace this current master branch.***
+
 ## About
 
 Rock Paper Stuff is a game designed for artificial intelligence experiments and education. 
