@@ -13,18 +13,18 @@
                 :paper [[:paper][:rock]]
                 :scissors [[:scissors :fire] [:rock]]
                 :fire [[:fire] [:scissors]] 
-                :water [[:rock] [:water :water]]) 
+                :water [[] [:water :water]]) 
         :paper (case play2
                  :scissors [[:scissors] [:paper :paper]]
                  :fire [[:fire] [:fire]]
-                 :water [[] [:paper :water]]
+                 :water [[:paper :water] []]
                  (inverse))
         :scissors (case play2
                     :fire [[:fire] [:scissors]]
                     :water [[:water] [:rock]]
                     (inverse))
         :fire (case play2
-                :water [[:water] [:water]]
+                :water [[] [:water :water]]
                 (inverse))
         :water (inverse)))))
 
@@ -125,3 +125,4 @@
   [games players]
   (let [results (repeatedly games #(play-game players))]
     (reverse (sort-by val (frequencies (map :winner results))))))
+

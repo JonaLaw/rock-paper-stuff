@@ -37,17 +37,17 @@ Although players can't see what each other are going to play before they choose 
 
 - If A plays Rock and B plays Fire, then A gets Fire and B gets Scissors (Fire forges Rock into Scissors)
 
-- If A plays Rock and B plays Water, then A gets Rock and B gets two Water (Rock splashes back Water)
+- If A plays Rock and B plays Water, then A gets nothing and B gets two Water (Rock sinks and splashes back Water)
 
 - If A plays Paper and B plays Scissors, then A gets Scissors and B gets two Paper (Scissors cuts paper into two)
 
 - If A plays Paper and B plays Fire, then A gets Fire and B gets Fire (Fire lights Paper)
 
-- If A plays Paper and B plays Water, then A gets nothing and B gets Paper and Water (Paper absorbs Water)
+- If A plays Paper and B plays Water, then A gets Paper and Water and B gets Nothing (Paper absorbs Water)
 
 - If A plays Scissors and B plays Water, then A gets Water and B gets Rock (Water rusts Scissors into Rock)
 
-- If A plays Fire and B plays Water, then A gets Water and B gets Water (Water extinguishes Fire)
+- If A plays Fire and B plays Water, then A gets nothing and B gets two Water (Water extinguishes Fire)
 
 For all other trades, the played items are simply exchanged.
 
@@ -76,6 +76,7 @@ To run games and tournaments from the terminal, put your code in `user.clj` in t
 Based on ideas from conversations with members of the [Hampshire College Computational Intelligence Lab](http://sites.hampshire.edu/ci-lab/) and:
 
 - Clifford Bohm
+- Ira Fay
 - Jim Kan
 - Joshua Newman
 - Charles Ofria
