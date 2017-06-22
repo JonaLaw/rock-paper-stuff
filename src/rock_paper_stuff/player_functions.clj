@@ -59,7 +59,10 @@
 (defn water-hoarder-pf
   "A player function that never plays :water, but otherwise plays randomly."
   [self other-skin]
-  {:play (rand-nth [:rock :paper :scissors :fire])})
+  {:play (let [non-water (remove #(= % :water) (u/possessions self))]
+           (if (empty? non-water)
+             nil
+             (rand-nth non-water)))})
 
 (defn harry-hater-pf
   "A player function that plays :paper against players named Harry, and
@@ -79,3 +82,4 @@
            :fire :water
            :rock :water
            :water :scissors)})
+

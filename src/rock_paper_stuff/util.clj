@@ -2,6 +2,13 @@
 
 (def stuff [:rock :paper :scissors :fire :water])
 
+(defn possessions
+  "Returns a collections of all of the kinds of stuff for which the player
+  has non-zero inventory."
+  [player]
+  (map first (filter (comp pos? second) 
+                     (:inventory player))))
+
 (defn legitimize
   "Returns a legitimate kind of stuff for the player to play. If the provided
   thing is legitimate, then it is returned. Otherwise, a random legitimate
@@ -10,8 +17,7 @@
   (if (and (some #{thing} stuff)
            (pos? (thing (:inventory player))))
     thing
-    (first (rand-nth (filter (comp pos? second) 
-                             (:inventory player))))))
+    (rand-nth (possessions player))))
 
 (defn player
   "Retuns a Rock Paper Stuff player with the provided name and player function.
@@ -31,3 +37,4 @@
    :memory {}
    :skin {}
    :alive true})
+
