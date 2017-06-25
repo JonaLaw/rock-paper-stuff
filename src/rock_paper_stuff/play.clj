@@ -11,20 +11,20 @@
       (case play1
         :rock (case play2
                 :paper [[:paper][:rock]]
-                :scissors [[:scissors :fire] [:rock]]
-                :fire [[:fire] [:scissors]] 
+                :scissors [[:fire] [:rock]]
+                :fire [[:rock] [:scissors]] 
                 :water [[] [:water :water]]) 
         :paper (case play2
-                 :scissors [[:scissors] [:paper :paper]]
-                 :fire [[:fire] [:fire]]
-                 :water [[:paper :water] []]
+                 :scissors [[:paper :paper][:scissors]]
+                 :fire [[] [:fire :fire]]
+                 :water [[:paper] []]
                  (inverse))
         :scissors (case play2
-                    :fire [[:fire] [:scissors]]
+                    :fire [[:scissors :scissors] [:fire]]
                     :water [[:water] [:rock]]
                     (inverse))
         :fire (case play2
-                :water [[] [:water :water]]
+                :water [[] [:water]]
                 (inverse))
         :water (inverse)))))
 
@@ -50,7 +50,7 @@
   each trade to be printed. Returns a map of the :winner (which is the :name
   of the highest-scoring player, or Nobody if there is no single winner),
   a :summary (a vector of the players at the game, but showing only each
-  player's :name and :water), and the collection of final :players in
+  player's :name and deviance), and the collection of final :players in
   full detail."
   [players & additional-args]
   (let [num-players (count players)]
@@ -74,16 +74,15 @@
                 (< (count alive) 2))
           ;; game over, return a report
           (let [dead (filter #(not (:alive %)) players)
-                sorted (concat (reverse (sort-by (comp :water :inventory) alive))
-                               (reverse (sort-by (comp :water :inventory) dead)))]
+                sorted (concat (sort-by u/deviance alive) dead)]
             {:survivors (count alive)
-             :winner (if (apply = (map (comp :water :inventory) (take 2 sorted)))
+             :winner (if (apply = (map u/deviance (take 2 sorted)))
                        "Nobody"
                        (:name (first sorted)))
              :summary (mapv #(do {:name (:name %) 
-                                  :water (:water (:inventory %))})
+                                  :deviance (u/deviance %)})
                             sorted)
-             :players sorted
+             :players (mapv #(assoc % :deviance (u/deviance %)) sorted)
              :global-history global-history})
           ;; otherwise, two live players play
           (let [;;; pick 2 live players
@@ -134,5 +133,7 @@
   [games players]
   (let [results (repeatedly games #(play-game players))]
     (reverse (sort-by val (frequencies (map :winner results))))))
+
+
 
 

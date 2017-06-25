@@ -77,9 +77,24 @@
   function, and plays in a way intended to harm that opponent."
   [self other-skin]
   {:play (case (:play (majority-pf {:inventory (:inventory other-skin)} {}))
-           :paper :water
+           :paper :scissors
            :scissors :fire
-           :fire :water
-           :rock :water
-           :water :scissors)})
+           :fire :paper
+           :rock :fire
+           :water :rock)})
+
+
+(defn maggie-hater-pf
+  "A player that assumes that its opponent is using the majority-pf player
+  function, and plays in a way intended to harm that opponent."
+  [self other-skin]
+  {:play (case (:play (margie-hater-pf {:inventory (:inventory other-skin)} 
+                                       {:inventory (:inventory self)}))
+           :paper :scissors
+           :scissors :fire
+           :fire :paper
+           :rock :fire
+           :water :rock)})
+
+
 

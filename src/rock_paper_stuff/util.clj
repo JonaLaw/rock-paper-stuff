@@ -19,6 +19,28 @@
     thing
     (rand-nth (possessions player))))
 
+(defn mean
+  [coll]
+  "https://github.com/clojure-cookbook/clojure-cookbook/blob/master/01_primitive-data/1-20_simple-statistics.asciidoc"
+  (let [sum (apply + coll)
+        count (count coll)]
+    (if (pos? count)
+      (/ sum count)
+      0)))
+
+(defn stdev [nums]
+  (let [mean (mean nums)]
+    (Math/sqrt (/ (apply +' (map #(* (- % mean) (- % mean))
+                                 nums))
+                  (dec (count nums))))))
+
+(defn balance
+  [player]
+  (let [amounts (vals (:inventory player))]
+    (if (zero? (reduce + amounts))
+      1000000000000000
+      (stdev amounts))))
+
 (defn player
   "Retuns a Rock Paper Stuff player with the provided name and player function.
   A player is a map of: 
@@ -37,4 +59,5 @@
    :memory {}
    :skin {}
    :alive true})
+
 
