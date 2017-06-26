@@ -6,7 +6,7 @@
   the player of play2 will receive from the trade, respectively."
   [play1 play2]
   (if (= play1 play2)
-    [[play2] [play1]]
+    (rand-nth [[[play1 play2] []] [[] [play1 play2]]])
     (let [inverse #(reverse (outcome play2 play1))]
       (case play1
         :rock (case play2
