@@ -69,7 +69,7 @@
       ;; print inventories when appropriate
       (when (some #{:print} additional-args)
         (doseq [p (sort-by :name players)]
-          (println (:name p) "inventory:" (:inventory p))))
+          (println "    "(:name p) "inventory:" (:inventory p))))
       (let [alive (filter :alive players)]
         (if (or (zero? steps)
                 (< (count alive) 2))
@@ -134,7 +134,4 @@
   [games players]
   (let [results (repeatedly games #(play-game players))]
     (reverse (sort-by val (frequencies (map :winner results))))))
-
-
-
 

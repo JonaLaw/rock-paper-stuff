@@ -60,5 +60,3 @@
    :skin {}
    :alive false})
 
-
-

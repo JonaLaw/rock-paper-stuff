@@ -1,6 +1,3 @@
-;; gorilla-repl.fileformat = 1
-
-;; @@
 (ns rock-paper-stuff.player-functions
   (:require [rock-paper-stuff.util :as u]))
 
@@ -108,11 +105,3 @@
                candidates (filter (fn [[key val]] (= val v)) (:inventory self))]
            (first (first (shuffle candidates))))})
 
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;rock-paper-stuff.player-functions/maggie-hater-pf</span>","value":"#'rock-paper-stuff.player-functions/maggie-hater-pf"}
-;; <=
-
-;; @@
-
-;; @@
