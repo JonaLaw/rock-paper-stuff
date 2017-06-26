@@ -61,7 +61,8 @@
                             (assoc p :inventory 
                               (apply hash-map 
                                      (interleave u/stuff 
-                                                 (repeat (* 5 num-players))))))
+                                                 (repeat (* 5 num-players))))
+                              :alive true))
                           players)
             ;; the global-history is initially empty
             global-history []]

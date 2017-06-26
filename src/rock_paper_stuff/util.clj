@@ -34,7 +34,7 @@
                                  nums))
                   (dec (count nums))))))
 
-(defn balance
+(defn deviance
   [player]
   (let [amounts (vals (:inventory player))]
     (if (zero? (reduce + amounts))
@@ -50,7 +50,7 @@
    :history <vec of maps of :other, :play, :other-play; grows at the end>
    :memory <map under player's control>
    :skin <map under player's control except includes honest :inventory>
-   :alive <initially true, becomes false if inventory depleted>}"
+   :alive <made true on init, becomes false when inventory depleted>}"
   [name function]
   {:name name
    :inventory {:rock 0 :paper 0 :scissors 0 :fire 0 :water 0}
@@ -58,6 +58,7 @@
    :history []
    :memory {}
    :skin {}
-   :alive true})
+   :alive false})
+
 
 
