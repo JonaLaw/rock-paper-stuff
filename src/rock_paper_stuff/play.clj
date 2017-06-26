@@ -49,9 +49,7 @@
   of :print following the collection of players will cause information about
   each trade to be printed. Returns a map of the :winner (which is the :name
   of the highest-scoring player, or Nobody if there is no single winner),
-  a :summary (a vector of the players at the game, but showing only each
-  player's :name and deviance), and the collection of final :players in
-  full detail."
+  and the collection of final :players in full detail."
   [players & additional-args]
   (let [num-players (count players)]
     (loop [;;; play for n(n-1)/2 steps, where n is the number of players
@@ -76,13 +74,9 @@
           ;; game over, return a report
           (let [dead (filter #(not (:alive %)) players)
                 sorted (concat (sort-by u/deviance alive) dead)]
-            {:survivors (count alive)
-             :winner (if (apply = (map u/deviance (take 2 sorted)))
+            {:winner (if (apply = (map u/deviance (take 2 sorted)))
                        "Nobody"
                        (:name (first sorted)))
-             :summary (mapv #(do {:name (:name %) 
-                                  :deviance (u/deviance %)})
-                            sorted)
              :players (mapv #(assoc % :deviance (u/deviance %)) sorted)
              :global-history global-history})
           ;; otherwise, two live players play
@@ -134,4 +128,5 @@
   [games players]
   (let [results (repeatedly games #(play-game players))]
     (reverse (sort-by val (frequencies (map :winner results))))))
+
 

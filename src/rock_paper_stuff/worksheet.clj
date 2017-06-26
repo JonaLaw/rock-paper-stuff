@@ -13,12 +13,81 @@
 ;; @@
 (ns rock-paper-stuff.worksheet
   (:require [gorilla-plot.core :as plot])
-  (:use [rock-paper-stuff util play player-functions]
+  (:use [rock-paper-stuff util play]
         [clojure.pprint]))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}
 ;; <=
+
+;; @@
+(defn rock-pf
+  "A player function that always plays :rock."
+  [self other-skin]
+  {:play :rock})
+;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-var'>#&#x27;rock-paper-stuff.worksheet/rock-pf</span>","value":"#'rock-paper-stuff.worksheet/rock-pf"}
+;; <=
+
+;; @@
+(:winner (play-game [(player "Rocky" rock-pf)
+                     (player "Roxy" rock-pf)]))
+;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-string'>&quot;Nobody&quot;</span>","value":"\"Nobody\""}
+;; <=
+
+;; @@
+(defn random-pf
+  "A player function that returns a random kind of stuff to play."
+  [self other-skin]
+  {:play (rand-nth [:rock :paper :scissors :fire :water])})
+;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-var'>#&#x27;rock-paper-stuff.worksheet/random-pf</span>","value":"#'rock-paper-stuff.worksheet/random-pf"}
+;; <=
+
+;; @@
+(:winner (play-game [(player "Rocky" rock-pf)
+                     (player "Randy" random-pf)]))
+;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-string'>&quot;Rocky&quot;</span>","value":"\"Rocky\""}
+;; <=
+
+;; @@
+(:summary (play-game [(player "Rocky" rock-pf)
+                      (player "Randy" random-pf)]))
+;; @@
+;; =>
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:name \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>5.029910535983717</span>","value":"5.029910535983717"}],"value":"[:deviance 5.029910535983717]"}],"value":"{:name \"Randy\", :deviance 5.029910535983717}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Rocky&quot;</span>","value":"\"Rocky\""}],"value":"[:name \"Rocky\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>6.48074069840786</span>","value":"6.48074069840786"}],"value":"[:deviance 6.48074069840786]"}],"value":"{:name \"Rocky\", :deviance 6.48074069840786}"}],"value":"[{:name \"Randy\", :deviance 5.029910535983717} {:name \"Rocky\", :deviance 6.48074069840786}]"}
+;; <=
+
+;; @@
+(map summary
+     (:players (play-game [(player "Rocky" rock-pf)
+                           (player "Randy" random-pf)])))
+;; @@
+;; =>
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Rocky&quot;</span>","value":"\"Rocky\""},{"type":"html","content":"<span class='clj-double'>5.224940191045253</span>","value":"5.224940191045253"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:fire</span>","value":":fire"},{"type":"html","content":"<span class='clj-long'>13</span>","value":"13"}],"value":"[:fire 13]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:paper</span>","value":":paper"},{"type":"html","content":"<span class='clj-long'>12</span>","value":"12"}],"value":"[:paper 12]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:scissors</span>","value":":scissors"},{"type":"html","content":"<span class='clj-long'>6</span>","value":"6"}],"value":"[:scissors 6]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:water</span>","value":":water"},{"type":"html","content":"<span class='clj-long'>7</span>","value":"7"}],"value":"[:water 7]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:rock</span>","value":":rock"},{"type":"html","content":"<span class='clj-long'>0</span>","value":"0"}],"value":"[:rock 0]"}],"value":"{:fire 13, :paper 12, :scissors 6, :water 7, :rock 0}"}],"value":"[\"Rocky\" 5.224940191045253 {:fire 13, :paper 12, :scissors 6, :water 7, :rock 0}]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""},{"type":"html","content":"<span class='clj-double'>7.014271166700073</span>","value":"7.014271166700073"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:fire</span>","value":":fire"},{"type":"html","content":"<span class='clj-long'>6</span>","value":"6"}],"value":"[:fire 6]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:paper</span>","value":":paper"},{"type":"html","content":"<span class='clj-long'>8</span>","value":"8"}],"value":"[:paper 8]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:scissors</span>","value":":scissors"},{"type":"html","content":"<span class='clj-long'>11</span>","value":"11"}],"value":"[:scissors 11]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:water</span>","value":":water"},{"type":"html","content":"<span class='clj-long'>24</span>","value":"24"}],"value":"[:water 24]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:rock</span>","value":":rock"},{"type":"html","content":"<span class='clj-long'>12</span>","value":"12"}],"value":"[:rock 12]"}],"value":"{:fire 6, :paper 8, :scissors 11, :water 24, :rock 12}"}],"value":"[\"Randy\" 7.014271166700073 {:fire 6, :paper 8, :scissors 11, :water 24, :rock 12}]"}],"value":"([\"Rocky\" 5.224940191045253 {:fire 13, :paper 12, :scissors 6, :water 7, :rock 0}] [\"Randy\" 7.014271166700073 {:fire 6, :paper 8, :scissors 11, :water 24, :rock 12}])"}
+;; <=
+
+;; @@
+
+;; @@
+
+;; @@
+
+;; @@
+
+;; @@
+
+;; @@
+
+;; @@
+
+;; @@
 
 ;; **
 ;;; Now let's play a game with two players who use the `random-pf` player function, which is defined (along with other player functions used in the examples below) in the `rock-paper-stuff.player-functions` namespace. 
@@ -33,7 +102,7 @@
         :players)
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:survivors</span>","value":":survivors"},{"type":"html","content":"<span class='clj-unkown'>2</span>","value":"2"}],"value":"[:survivors 2]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:winner</span>","value":":winner"},{"type":"html","content":"<span class='clj-string'>&quot;Sandy&quot;</span>","value":"\"Sandy\""}],"value":"[:winner \"Sandy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:summary</span>","value":":summary"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Sandy&quot;</span>","value":"\"Sandy\""}],"value":"[:name \"Sandy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>2.7748873851023217</span>","value":"2.7748873851023217"}],"value":"[:deviance 2.7748873851023217]"}],"value":"{:name \"Sandy\", :deviance 2.7748873851023217}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:name \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>3.361547262794322</span>","value":"3.361547262794322"}],"value":"[:deviance 3.361547262794322]"}],"value":"{:name \"Randy\", :deviance 3.361547262794322}"}],"value":"[{:name \"Sandy\", :deviance 2.7748873851023217} {:name \"Randy\", :deviance 3.361547262794322}]"}],"value":"[:summary [{:name \"Sandy\", :deviance 2.7748873851023217} {:name \"Randy\", :deviance 3.361547262794322}]]"}],"value":"{:survivors 2, :winner \"Sandy\", :summary [{:name \"Sandy\", :deviance 2.7748873851023217} {:name \"Randy\", :deviance 3.361547262794322}]}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:survivors</span>","value":":survivors"},{"type":"html","content":"<span class='clj-unkown'>2</span>","value":"2"}],"value":"[:survivors 2]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:winner</span>","value":":winner"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:winner \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:summary</span>","value":":summary"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:name \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>1.9235384061671346</span>","value":"1.9235384061671346"}],"value":"[:deviance 1.9235384061671346]"}],"value":"{:name \"Randy\", :deviance 1.9235384061671346}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Sandy&quot;</span>","value":"\"Sandy\""}],"value":"[:name \"Sandy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>3.1144823004794873</span>","value":"3.1144823004794873"}],"value":"[:deviance 3.1144823004794873]"}],"value":"{:name \"Sandy\", :deviance 3.1144823004794873}"}],"value":"[{:name \"Randy\", :deviance 1.9235384061671346} {:name \"Sandy\", :deviance 3.1144823004794873}]"}],"value":"[:summary [{:name \"Randy\", :deviance 1.9235384061671346} {:name \"Sandy\", :deviance 3.1144823004794873}]]"}],"value":"{:survivors 2, :winner \"Randy\", :summary [{:name \"Randy\", :deviance 1.9235384061671346} {:name \"Sandy\", :deviance 3.1144823004794873}]}"}
 ;; <=
 
 ;; **
@@ -50,8 +119,8 @@
 ;;; {:survivors 2,
 ;;;  :winner &quot;Randy&quot;,
 ;;;  :summary
-;;;  [{:name &quot;Randy&quot;, :deviance 3.714835124201342}
-;;;   {:name &quot;Sandy&quot;, :deviance 5.128352561983234}]}
+;;;  [{:name &quot;Randy&quot;, :deviance 4.722287581247038}
+;;;   {:name &quot;Sandy&quot;, :deviance 5.718391382198319}]}
 ;;; 
 ;; <-
 ;; =>
@@ -67,7 +136,7 @@
                       (player "Sandy" random-pf)]))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Sandy&quot;</span>","value":"\"Sandy\""}],"value":"[:name \"Sandy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>2.1908902300206643</span>","value":"2.1908902300206643"}],"value":"[:deviance 2.1908902300206643]"}],"value":"{:name \"Sandy\", :deviance 2.1908902300206643}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:name \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>5.630275304103699</span>","value":"5.630275304103699"}],"value":"[:deviance 5.630275304103699]"}],"value":"{:name \"Randy\", :deviance 5.630275304103699}"}],"value":"[{:name \"Sandy\", :deviance 2.1908902300206643} {:name \"Randy\", :deviance 5.630275304103699}]"}
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Sandy&quot;</span>","value":"\"Sandy\""}],"value":"[:name \"Sandy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>4.219004621945797</span>","value":"4.219004621945797"}],"value":"[:deviance 4.219004621945797]"}],"value":"{:name \"Sandy\", :deviance 4.219004621945797}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:name \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>4.969909455915671</span>","value":"4.969909455915671"}],"value":"[:deviance 4.969909455915671]"}],"value":"{:name \"Randy\", :deviance 4.969909455915671}"}],"value":"[{:name \"Sandy\", :deviance 4.219004621945797} {:name \"Randy\", :deviance 4.969909455915671}]"}
 ;; <=
 
 ;; **
@@ -82,310 +151,310 @@
 ;; ->
 ;;;      Randy inventory: {:fire 10, :paper 10, :scissors 10, :water 10, :rock 10}
 ;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 10, :water 10, :rock 10}
-;;; Sandy plays :water  -  Randy plays :fire
-;;;      Randy inventory: {:fire 9, :paper 10, :scissors 10, :water 10, :rock 10}
-;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 10, :water 10, :rock 10}
-;;; Randy plays :water  -  Sandy plays :fire
-;;;      Randy inventory: {:fire 9, :paper 10, :scissors 10, :water 10, :rock 10}
-;;;      Sandy inventory: {:fire 9, :paper 10, :scissors 10, :water 10, :rock 10}
-;;; Sandy plays :scissors  -  Randy plays :scissors
-;;;      Randy inventory: {:fire 9, :paper 10, :scissors 10, :water 10, :rock 10}
-;;;      Sandy inventory: {:fire 9, :paper 10, :scissors 10, :water 10, :rock 10}
-;;; Randy plays :scissors  -  Sandy plays :water
-;;;      Randy inventory: {:fire 9, :paper 10, :scissors 9, :water 11, :rock 10}
-;;;      Sandy inventory: {:fire 9, :paper 10, :scissors 10, :water 9, :rock 11}
-;;; Randy plays :water  -  Sandy plays :rock
-;;;      Randy inventory: {:fire 9, :paper 10, :scissors 9, :water 12, :rock 10}
-;;;      Sandy inventory: {:fire 9, :paper 10, :scissors 10, :water 9, :rock 10}
-;;; Sandy plays :rock  -  Randy plays :scissors
-;;;      Randy inventory: {:fire 9, :paper 10, :scissors 8, :water 12, :rock 11}
-;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 10, :water 9, :rock 9}
-;;; Randy plays :fire  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 9, :paper 10, :scissors 8, :water 12, :rock 11}
-;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 11, :water 9, :rock 9}
-;;; Sandy plays :fire  -  Randy plays :paper
-;;;      Randy inventory: {:fire 9, :paper 9, :scissors 8, :water 12, :rock 11}
-;;;      Sandy inventory: {:fire 11, :paper 10, :scissors 11, :water 9, :rock 9}
-;;; Randy plays :paper  -  Sandy plays :rock
-;;;      Randy inventory: {:fire 9, :paper 8, :scissors 8, :water 12, :rock 12}
-;;;      Sandy inventory: {:fire 11, :paper 11, :scissors 11, :water 9, :rock 8}
-;;; Sandy plays :scissors  -  Randy plays :scissors
-;;;      Randy inventory: {:fire 9, :paper 8, :scissors 8, :water 12, :rock 12}
-;;;      Sandy inventory: {:fire 11, :paper 11, :scissors 11, :water 9, :rock 8}
-;;; Randy plays :paper  -  Sandy plays :rock
-;;;      Randy inventory: {:fire 9, :paper 7, :scissors 8, :water 12, :rock 13}
-;;;      Sandy inventory: {:fire 11, :paper 12, :scissors 11, :water 9, :rock 7}
-;;; Sandy plays :scissors  -  Randy plays :scissors
-;;;      Randy inventory: {:fire 9, :paper 7, :scissors 8, :water 12, :rock 13}
-;;;      Sandy inventory: {:fire 11, :paper 12, :scissors 11, :water 9, :rock 7}
-;;; Sandy plays :water  -  Randy plays :fire
-;;;      Randy inventory: {:fire 8, :paper 7, :scissors 8, :water 12, :rock 13}
-;;;      Sandy inventory: {:fire 11, :paper 12, :scissors 11, :water 9, :rock 7}
-;;; Sandy plays :rock  -  Randy plays :paper
-;;;      Randy inventory: {:fire 8, :paper 6, :scissors 8, :water 12, :rock 14}
-;;;      Sandy inventory: {:fire 11, :paper 13, :scissors 11, :water 9, :rock 6}
-;;; Sandy plays :rock  -  Randy plays :scissors
-;;;      Randy inventory: {:fire 8, :paper 6, :scissors 7, :water 12, :rock 15}
-;;;      Sandy inventory: {:fire 12, :paper 13, :scissors 11, :water 9, :rock 5}
-;;; Sandy plays :water  -  Randy plays :paper
-;;;      Randy inventory: {:fire 8, :paper 6, :scissors 7, :water 12, :rock 15}
-;;;      Sandy inventory: {:fire 12, :paper 13, :scissors 11, :water 8, :rock 5}
-;;; Sandy plays :scissors  -  Randy plays :scissors
-;;;      Randy inventory: {:fire 8, :paper 6, :scissors 7, :water 12, :rock 15}
-;;;      Sandy inventory: {:fire 12, :paper 13, :scissors 11, :water 8, :rock 5}
-;;; Randy plays :scissors  -  Sandy plays :water
-;;;      Randy inventory: {:fire 8, :paper 6, :scissors 6, :water 13, :rock 15}
-;;;      Sandy inventory: {:fire 12, :paper 13, :scissors 11, :water 7, :rock 6}
-;;; Randy plays :water  -  Sandy plays :water
-;;;      Randy inventory: {:fire 8, :paper 6, :scissors 6, :water 13, :rock 15}
-;;;      Sandy inventory: {:fire 12, :paper 13, :scissors 11, :water 7, :rock 6}
-;;; Sandy plays :fire  -  Randy plays :paper
-;;;      Randy inventory: {:fire 8, :paper 5, :scissors 6, :water 13, :rock 15}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 11, :water 7, :rock 6}
-;;; Randy plays :water  -  Sandy plays :rock
-;;;      Randy inventory: {:fire 8, :paper 5, :scissors 6, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 11, :water 7, :rock 5}
-;;; Randy plays :paper  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 8, :paper 5, :scissors 6, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 11, :water 7, :rock 5}
-;;; Sandy plays :water  -  Randy plays :water
-;;;      Randy inventory: {:fire 8, :paper 5, :scissors 6, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 11, :water 7, :rock 5}
-;;; Sandy plays :scissors  -  Randy plays :rock
-;;;      Randy inventory: {:fire 9, :paper 5, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 10, :water 7, :rock 6}
-;;; Sandy plays :scissors  -  Randy plays :paper
-;;;      Randy inventory: {:fire 9, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 10, :water 7, :rock 6}
-;;; Sandy plays :scissors  -  Randy plays :fire
-;;;      Randy inventory: {:fire 9, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 11, :water 7, :rock 6}
-;;; Sandy plays :water  -  Randy plays :water
-;;;      Randy inventory: {:fire 9, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 11, :water 7, :rock 6}
-;;; Randy plays :fire  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 9, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 12, :water 7, :rock 6}
-;;; Randy plays :scissors  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 9, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 12, :water 7, :rock 6}
-;;; Randy plays :paper  -  Sandy plays :water
-;;;      Randy inventory: {:fire 9, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 12, :water 6, :rock 6}
-;;; Randy plays :scissors  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 9, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 14, :scissors 12, :water 6, :rock 6}
-;;; Randy plays :paper  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 9, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 14, :scissors 12, :water 6, :rock 6}
-;;; Randy plays :water  -  Sandy plays :water
-;;;      Randy inventory: {:fire 9, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 14, :scissors 12, :water 6, :rock 6}
-;;; Randy plays :fire  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 10, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 12, :water 6, :rock 6}
-;;; Sandy plays :water  -  Randy plays :water
-;;;      Randy inventory: {:fire 10, :paper 6, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 13, :paper 13, :scissors 12, :water 6, :rock 6}
-;;; Randy plays :paper  -  Sandy plays :fire
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 14, :paper 13, :scissors 12, :water 6, :rock 6}
-;;; Randy plays :rock  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 11, :paper 5, :scissors 6, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 14, :paper 13, :scissors 11, :water 6, :rock 7}
 ;;; Randy plays :paper  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 11, :paper 6, :scissors 6, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 14, :paper 13, :scissors 11, :water 6, :rock 7}
-;;; Sandy plays :rock  -  Randy plays :paper
-;;;      Randy inventory: {:fire 11, :paper 5, :scissors 6, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 14, :paper 14, :scissors 11, :water 6, :rock 6}
-;;; Sandy plays :rock  -  Randy plays :fire
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 14, :paper 14, :scissors 11, :water 6, :rock 6}
-;;; Randy plays :paper  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 14, :paper 14, :scissors 11, :water 6, :rock 6}
-;;; Sandy plays :fire  -  Randy plays :paper
-;;;      Randy inventory: {:fire 10, :paper 4, :scissors 7, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 15, :paper 14, :scissors 11, :water 6, :rock 6}
-;;; Randy plays :fire  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 11, :paper 4, :scissors 7, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 15, :paper 13, :scissors 11, :water 6, :rock 6}
-;;; Randy plays :rock  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 11, :paper 5, :scissors 7, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 15, :paper 12, :scissors 11, :water 6, :rock 7}
-;;; Sandy plays :rock  -  Randy plays :fire
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 8, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 15, :paper 12, :scissors 11, :water 6, :rock 7}
-;;; Sandy plays :rock  -  Randy plays :scissors
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 11, :water 6, :rock 6}
-;;; Randy plays :water  -  Sandy plays :rock
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 15, :rock 14}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 11, :water 6, :rock 5}
+;;;      Randy inventory: {:fire 10, :paper 11, :scissors 10, :water 10, :rock 10}
+;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 10, :water 10, :rock 10}
 ;;; Randy plays :water  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 10, :water 7, :rock 5}
-;;; Sandy plays :fire  -  Randy plays :fire
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 10, :water 7, :rock 5}
-;;; Randy plays :paper  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 10, :water 7, :rock 5}
-;;; Sandy plays :fire  -  Randy plays :fire
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 10, :water 7, :rock 5}
+;;;      Randy inventory: {:fire 10, :paper 11, :scissors 10, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 9, :water 11, :rock 10}
+;;; Sandy plays :rock  -  Randy plays :rock
+;;;      Randy inventory: {:fire 10, :paper 11, :scissors 10, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 9, :water 11, :rock 11}
+;;; Randy plays :rock  -  Sandy plays :rock
+;;;      Randy inventory: {:fire 10, :paper 11, :scissors 10, :water 9, :rock 9}
+;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 9, :water 11, :rock 12}
+;;; Sandy plays :water  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 10, :paper 11, :scissors 9, :water 10, :rock 9}
+;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 9, :water 10, :rock 13}
+;;; Sandy plays :fire  -  Randy plays :rock
+;;;      Randy inventory: {:fire 10, :paper 11, :scissors 9, :water 10, :rock 9}
+;;;      Sandy inventory: {:fire 9, :paper 10, :scissors 10, :water 10, :rock 13}
 ;;; Sandy plays :rock  -  Randy plays :water
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 15, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 10, :water 7, :rock 4}
-;;; Sandy plays :rock  -  Randy plays :rock
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 15, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 10, :water 7, :rock 4}
-;;; Randy plays :water  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 10, :water 7, :rock 4}
-;;; Sandy plays :paper  -  Randy plays :paper
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 10, :water 7, :rock 4}
-;;; Sandy plays :water  -  Randy plays :fire
-;;;      Randy inventory: {:fire 9, :paper 5, :scissors 7, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 12, :scissors 10, :water 7, :rock 4}
-;;; Sandy plays :paper  -  Randy plays :fire
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 7, :water 14, :rock 15}
-;;;      Sandy inventory: {:fire 16, :paper 11, :scissors 10, :water 7, :rock 4}
-;;; Sandy plays :scissors  -  Randy plays :rock
-;;;      Randy inventory: {:fire 11, :paper 5, :scissors 7, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 16, :paper 11, :scissors 9, :water 7, :rock 5}
-;;; Sandy plays :scissors  -  Randy plays :paper
-;;;      Randy inventory: {:fire 11, :paper 6, :scissors 7, :water 14, :rock 14}
-;;;      Sandy inventory: {:fire 16, :paper 11, :scissors 9, :water 7, :rock 5}
-;;; Randy plays :scissors  -  Sandy plays :water
-;;;      Randy inventory: {:fire 11, :paper 6, :scissors 6, :water 15, :rock 14}
-;;;      Sandy inventory: {:fire 16, :paper 11, :scissors 9, :water 6, :rock 6}
-;;; Randy plays :water  -  Sandy plays :fire
-;;;      Randy inventory: {:fire 11, :paper 6, :scissors 6, :water 15, :rock 14}
-;;;      Sandy inventory: {:fire 15, :paper 11, :scissors 9, :water 6, :rock 6}
-;;; Randy plays :rock  -  Sandy plays :water
-;;;      Randy inventory: {:fire 11, :paper 6, :scissors 6, :water 15, :rock 13}
-;;;      Sandy inventory: {:fire 15, :paper 11, :scissors 9, :water 7, :rock 6}
-;;; Sandy plays :rock  -  Randy plays :rock
-;;;      Randy inventory: {:fire 11, :paper 6, :scissors 6, :water 15, :rock 13}
-;;;      Sandy inventory: {:fire 15, :paper 11, :scissors 9, :water 7, :rock 6}
+;;;      Randy inventory: {:fire 10, :paper 11, :scissors 9, :water 11, :rock 9}
+;;;      Sandy inventory: {:fire 9, :paper 10, :scissors 10, :water 10, :rock 12}
+;;; Sandy plays :water  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 10, :paper 11, :scissors 8, :water 12, :rock 9}
+;;;      Sandy inventory: {:fire 9, :paper 10, :scissors 10, :water 9, :rock 13}
+;;; Sandy plays :fire  -  Randy plays :paper
+;;;      Randy inventory: {:fire 10, :paper 10, :scissors 8, :water 12, :rock 9}
+;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 10, :water 9, :rock 13}
 ;;; Randy plays :scissors  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 11, :paper 6, :scissors 6, :water 15, :rock 13}
-;;;      Sandy inventory: {:fire 15, :paper 11, :scissors 9, :water 7, :rock 6}
-;;; Randy plays :rock  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 12, :paper 6, :scissors 6, :water 15, :rock 12}
-;;;      Sandy inventory: {:fire 15, :paper 11, :scissors 8, :water 7, :rock 7}
-;;; Sandy plays :fire  -  Randy plays :rock
-;;;      Randy inventory: {:fire 12, :paper 6, :scissors 6, :water 15, :rock 12}
-;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 7, :rock 7}
+;;;      Randy inventory: {:fire 10, :paper 10, :scissors 9, :water 12, :rock 9}
+;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 9, :water 9, :rock 13}
 ;;; Randy plays :water  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 12, :paper 6, :scissors 6, :water 14, :rock 12}
-;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 7, :rock 7}
-;;; Randy plays :paper  -  Sandy plays :fire
-;;;      Randy inventory: {:fire 12, :paper 5, :scissors 6, :water 14, :rock 12}
-;;;      Sandy inventory: {:fire 15, :paper 11, :scissors 9, :water 7, :rock 7}
-;;; Randy plays :scissors  -  Sandy plays :water
-;;;      Randy inventory: {:fire 12, :paper 5, :scissors 5, :water 15, :rock 12}
-;;;      Sandy inventory: {:fire 15, :paper 11, :scissors 9, :water 6, :rock 8}
-;;; Sandy plays :fire  -  Randy plays :scissors
-;;;      Randy inventory: {:fire 12, :paper 5, :scissors 6, :water 15, :rock 12}
-;;;      Sandy inventory: {:fire 15, :paper 11, :scissors 9, :water 6, :rock 8}
-;;; Randy plays :rock  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 12, :paper 6, :scissors 6, :water 15, :rock 11}
-;;;      Sandy inventory: {:fire 15, :paper 10, :scissors 9, :water 6, :rock 9}
-;;; Randy plays :paper  -  Sandy plays :fire
-;;;      Randy inventory: {:fire 12, :paper 5, :scissors 6, :water 15, :rock 11}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 9, :water 6, :rock 9}
+;;;      Randy inventory: {:fire 10, :paper 10, :scissors 9, :water 11, :rock 9}
+;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 9, :water 9, :rock 13}
+;;; Sandy plays :scissors  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 10, :paper 10, :scissors 8, :water 11, :rock 9}
+;;;      Sandy inventory: {:fire 10, :paper 10, :scissors 10, :water 9, :rock 13}
+;;; Sandy plays :fire  -  Randy plays :paper
+;;;      Randy inventory: {:fire 10, :paper 9, :scissors 8, :water 11, :rock 9}
+;;;      Sandy inventory: {:fire 11, :paper 10, :scissors 10, :water 9, :rock 13}
+;;; Sandy plays :scissors  -  Randy plays :rock
+;;;      Randy inventory: {:fire 11, :paper 9, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 11, :paper 10, :scissors 9, :water 9, :rock 14}
+;;; Sandy plays :fire  -  Randy plays :paper
+;;;      Randy inventory: {:fire 11, :paper 8, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 12, :paper 10, :scissors 9, :water 9, :rock 14}
+;;; Sandy plays :fire  -  Randy plays :paper
+;;;      Randy inventory: {:fire 11, :paper 7, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 9, :water 9, :rock 14}
+;;; Randy plays :rock  -  Sandy plays :fire
+;;;      Randy inventory: {:fire 11, :paper 7, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 12, :paper 10, :scissors 10, :water 9, :rock 14}
+;;; Sandy plays :scissors  -  Randy plays :paper
+;;;      Randy inventory: {:fire 11, :paper 8, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 12, :paper 10, :scissors 10, :water 9, :rock 14}
 ;;; Sandy plays :water  -  Randy plays :fire
-;;;      Randy inventory: {:fire 11, :paper 5, :scissors 6, :water 15, :rock 11}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 9, :water 6, :rock 9}
-;;; Randy plays :scissors  -  Sandy plays :rock
-;;;      Randy inventory: {:fire 11, :paper 5, :scissors 5, :water 15, :rock 12}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 9, :water 6, :rock 8}
+;;;      Randy inventory: {:fire 10, :paper 8, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 12, :paper 10, :scissors 10, :water 9, :rock 14}
+;;; Sandy plays :water  -  Randy plays :fire
+;;;      Randy inventory: {:fire 9, :paper 8, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 12, :paper 10, :scissors 10, :water 9, :rock 14}
 ;;; Randy plays :fire  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 12, :paper 5, :scissors 5, :water 15, :rock 12}
-;;;      Sandy inventory: {:fire 17, :paper 9, :scissors 9, :water 6, :rock 8}
-;;; Randy plays :scissors  -  Sandy plays :water
-;;;      Randy inventory: {:fire 12, :paper 5, :scissors 4, :water 16, :rock 12}
-;;;      Sandy inventory: {:fire 17, :paper 9, :scissors 9, :water 5, :rock 9}
-;;; Sandy plays :rock  -  Randy plays :fire
-;;;      Randy inventory: {:fire 11, :paper 5, :scissors 5, :water 16, :rock 12}
-;;;      Sandy inventory: {:fire 17, :paper 9, :scissors 9, :water 5, :rock 9}
-;;; Randy plays :fire  -  Sandy plays :water
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 5, :water 16, :rock 12}
-;;;      Sandy inventory: {:fire 17, :paper 9, :scissors 9, :water 5, :rock 9}
-;;; Sandy plays :fire  -  Randy plays :rock
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 5, :water 16, :rock 12}
-;;;      Sandy inventory: {:fire 16, :paper 9, :scissors 10, :water 5, :rock 9}
-;;; Randy plays :scissors  -  Sandy plays :paper
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 5, :water 16, :rock 12}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 10, :water 5, :rock 9}
-;;; Sandy plays :fire  -  Randy plays :fire
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 5, :water 16, :rock 12}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 10, :water 5, :rock 9}
-;;; Sandy plays :rock  -  Randy plays :rock
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 5, :water 16, :rock 12}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 10, :water 5, :rock 9}
-;;; Sandy plays :paper  -  Randy plays :water
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 5, :water 15, :rock 12}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 10, :water 5, :rock 9}
-;;; Sandy plays :paper  -  Randy plays :paper
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 5, :water 15, :rock 12}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 10, :water 5, :rock 9}
-;;; Sandy plays :scissors  -  Randy plays :water
-;;;      Randy inventory: {:fire 10, :paper 5, :scissors 5, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 9, :water 6, :rock 9}
-;;; Sandy plays :water  -  Randy plays :fire
-;;;      Randy inventory: {:fire 9, :paper 5, :scissors 5, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 9, :water 6, :rock 9}
-;;; Sandy plays :fire  -  Randy plays :fire
-;;;      Randy inventory: {:fire 9, :paper 5, :scissors 5, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 9, :water 6, :rock 9}
-;;; Randy plays :fire  -  Sandy plays :fire
-;;;      Randy inventory: {:fire 9, :paper 5, :scissors 5, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 16, :paper 10, :scissors 9, :water 6, :rock 9}
+;;;      Randy inventory: {:fire 10, :paper 8, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 12, :paper 9, :scissors 10, :water 9, :rock 14}
+;;; Randy plays :paper  -  Sandy plays :paper
+;;;      Randy inventory: {:fire 10, :paper 9, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 12, :paper 8, :scissors 10, :water 9, :rock 14}
 ;;; Randy plays :paper  -  Sandy plays :fire
-;;;      Randy inventory: {:fire 9, :paper 4, :scissors 5, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 9, :water 6, :rock 9}
-;;; Sandy plays :water  -  Randy plays :paper
-;;;      Randy inventory: {:fire 9, :paper 4, :scissors 5, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 9, :water 5, :rock 9}
-;;; Sandy plays :paper  -  Randy plays :paper
-;;;      Randy inventory: {:fire 9, :paper 4, :scissors 5, :water 14, :rock 13}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 9, :water 5, :rock 9}
-;;; Sandy plays :water  -  Randy plays :rock
-;;;      Randy inventory: {:fire 9, :paper 4, :scissors 5, :water 14, :rock 12}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 9, :water 6, :rock 9}
-;;; Sandy plays :paper  -  Randy plays :water
-;;;      Randy inventory: {:fire 9, :paper 4, :scissors 5, :water 13, :rock 12}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 9, :water 6, :rock 9}
-;;; Randy plays :water  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 9, :paper 4, :scissors 5, :water 12, :rock 13}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 8, :water 7, :rock 9}
-;;; Randy plays :fire  -  Sandy plays :rock
-;;;      Randy inventory: {:fire 8, :paper 4, :scissors 6, :water 12, :rock 13}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 8, :water 7, :rock 9}
-;;; Randy plays :water  -  Sandy plays :scissors
-;;;      Randy inventory: {:fire 8, :paper 4, :scissors 6, :water 11, :rock 14}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 7, :water 8, :rock 9}
+;;;      Randy inventory: {:fire 10, :paper 8, :scissors 8, :water 11, :rock 8}
+;;;      Sandy inventory: {:fire 13, :paper 8, :scissors 10, :water 9, :rock 14}
 ;;; Sandy plays :rock  -  Randy plays :paper
-;;;      Randy inventory: {:fire 8, :paper 3, :scissors 6, :water 11, :rock 15}
-;;;      Sandy inventory: {:fire 17, :paper 11, :scissors 7, :water 8, :rock 8}
-;;; Sandy plays :paper  -  Randy plays :rock
-;;;      Randy inventory: {:fire 8, :paper 4, :scissors 6, :water 11, :rock 14}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 7, :water 8, :rock 9}
-;;; Randy plays :fire  -  Sandy plays :water
-;;;      Randy inventory: {:fire 7, :paper 4, :scissors 6, :water 11, :rock 14}
-;;;      Sandy inventory: {:fire 17, :paper 10, :scissors 7, :water 8, :rock 9}
+;;;      Randy inventory: {:fire 10, :paper 7, :scissors 8, :water 11, :rock 9}
+;;;      Sandy inventory: {:fire 13, :paper 9, :scissors 10, :water 9, :rock 13}
+;;; Sandy plays :water  -  Randy plays :water
+;;;      Randy inventory: {:fire 10, :paper 7, :scissors 8, :water 10, :rock 9}
+;;;      Sandy inventory: {:fire 13, :paper 9, :scissors 10, :water 10, :rock 13}
+;;; Randy plays :rock  -  Sandy plays :rock
+;;;      Randy inventory: {:fire 10, :paper 7, :scissors 8, :water 10, :rock 10}
+;;;      Sandy inventory: {:fire 13, :paper 9, :scissors 10, :water 10, :rock 12}
+;;; Sandy plays :rock  -  Randy plays :rock
+;;;      Randy inventory: {:fire 10, :paper 7, :scissors 8, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 9, :scissors 10, :water 10, :rock 11}
+;;; Randy plays :scissors  -  Sandy plays :paper
+;;;      Randy inventory: {:fire 10, :paper 7, :scissors 8, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 10, :rock 11}
 ;;; Sandy plays :paper  -  Randy plays :scissors
-;;;      Randy inventory: {:fire 7, :paper 4, :scissors 6, :water 11, :rock 14}
-;;;      Sandy inventory: {:fire 17, :paper 11, :scissors 7, :water 8, :rock 9}
+;;;      Randy inventory: {:fire 10, :paper 7, :scissors 8, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 10, :water 10, :rock 11}
+;;; Sandy plays :paper  -  Randy plays :paper
+;;;      Randy inventory: {:fire 10, :paper 6, :scissors 8, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 12, :scissors 10, :water 10, :rock 11}
+;;; Sandy plays :water  -  Randy plays :water
+;;;      Randy inventory: {:fire 10, :paper 6, :scissors 8, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 12, :scissors 10, :water 11, :rock 11}
+;;; Randy plays :water  -  Sandy plays :water
+;;;      Randy inventory: {:fire 10, :paper 6, :scissors 8, :water 8, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 12, :scissors 10, :water 12, :rock 11}
+;;; Randy plays :fire  -  Sandy plays :paper
+;;;      Randy inventory: {:fire 11, :paper 6, :scissors 8, :water 8, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 10, :water 12, :rock 11}
+;;; Randy plays :paper  -  Sandy plays :rock
+;;;      Randy inventory: {:fire 11, :paper 5, :scissors 8, :water 8, :rock 12}
+;;;      Sandy inventory: {:fire 13, :paper 12, :scissors 10, :water 12, :rock 10}
+;;; Randy plays :rock  -  Sandy plays :fire
+;;;      Randy inventory: {:fire 11, :paper 5, :scissors 8, :water 8, :rock 12}
+;;;      Sandy inventory: {:fire 12, :paper 12, :scissors 11, :water 12, :rock 10}
+;;; Sandy plays :scissors  -  Randy plays :rock
+;;;      Randy inventory: {:fire 12, :paper 5, :scissors 8, :water 8, :rock 11}
+;;;      Sandy inventory: {:fire 12, :paper 12, :scissors 10, :water 12, :rock 11}
+;;; Sandy plays :paper  -  Randy plays :water
+;;;      Randy inventory: {:fire 12, :paper 5, :scissors 8, :water 7, :rock 11}
+;;;      Sandy inventory: {:fire 12, :paper 12, :scissors 10, :water 12, :rock 11}
+;;; Sandy plays :water  -  Randy plays :water
+;;;      Randy inventory: {:fire 12, :paper 5, :scissors 8, :water 8, :rock 11}
+;;;      Sandy inventory: {:fire 12, :paper 12, :scissors 10, :water 11, :rock 11}
+;;; Randy plays :rock  -  Sandy plays :paper
+;;;      Randy inventory: {:fire 12, :paper 6, :scissors 8, :water 8, :rock 10}
+;;;      Sandy inventory: {:fire 12, :paper 11, :scissors 10, :water 11, :rock 12}
+;;; Sandy plays :water  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 12, :paper 6, :scissors 7, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 12, :paper 11, :scissors 10, :water 10, :rock 13}
+;;; Randy plays :paper  -  Sandy plays :paper
+;;;      Randy inventory: {:fire 12, :paper 7, :scissors 7, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 12, :paper 10, :scissors 10, :water 10, :rock 13}
+;;; Sandy plays :fire  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 12, :paper 7, :scissors 8, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 12, :paper 10, :scissors 10, :water 10, :rock 13}
+;;; Sandy plays :scissors  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 12, :paper 7, :scissors 9, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 12, :paper 10, :scissors 9, :water 10, :rock 13}
+;;; Sandy plays :rock  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 12, :paper 7, :scissors 8, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 9, :water 10, :rock 12}
+;;; Randy plays :rock  -  Sandy plays :rock
+;;;      Randy inventory: {:fire 12, :paper 7, :scissors 8, :water 9, :rock 12}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 9, :water 10, :rock 11}
+;;; Sandy plays :scissors  -  Randy plays :fire
+;;;      Randy inventory: {:fire 12, :paper 7, :scissors 8, :water 9, :rock 12}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 10, :rock 11}
+;;; Sandy plays :water  -  Randy plays :rock
+;;;      Randy inventory: {:fire 12, :paper 7, :scissors 8, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 11, :rock 11}
+;;; Sandy plays :paper  -  Randy plays :rock
+;;;      Randy inventory: {:fire 12, :paper 8, :scissors 8, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 13, :paper 9, :scissors 10, :water 11, :rock 12}
+;;; Randy plays :paper  -  Sandy plays :paper
+;;;      Randy inventory: {:fire 12, :paper 7, :scissors 8, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 11, :rock 12}
+;;; Sandy plays :paper  -  Randy plays :rock
+;;;      Randy inventory: {:fire 12, :paper 8, :scissors 8, :water 9, :rock 9}
+;;;      Sandy inventory: {:fire 13, :paper 9, :scissors 10, :water 11, :rock 13}
+;;; Randy plays :fire  -  Sandy plays :water
+;;;      Randy inventory: {:fire 11, :paper 8, :scissors 8, :water 9, :rock 9}
+;;;      Sandy inventory: {:fire 13, :paper 9, :scissors 10, :water 11, :rock 13}
+;;; Sandy plays :rock  -  Randy plays :paper
+;;;      Randy inventory: {:fire 11, :paper 7, :scissors 8, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 11, :rock 12}
+;;; Randy plays :water  -  Sandy plays :water
+;;;      Randy inventory: {:fire 11, :paper 7, :scissors 8, :water 10, :rock 10}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 10, :rock 12}
+;;; Sandy plays :scissors  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 11, :paper 7, :scissors 9, :water 10, :rock 10}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 9, :water 10, :rock 12}
+;;; Sandy plays :rock  -  Randy plays :paper
+;;;      Randy inventory: {:fire 11, :paper 6, :scissors 9, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 9, :water 10, :rock 11}
+;;; Sandy plays :scissors  -  Randy plays :fire
+;;;      Randy inventory: {:fire 11, :paper 6, :scissors 9, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 10, :water 10, :rock 11}
+;;; Sandy plays :scissors  -  Randy plays :fire
+;;;      Randy inventory: {:fire 11, :paper 6, :scissors 9, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 11, :water 10, :rock 11}
+;;; Sandy plays :paper  -  Randy plays :fire
+;;;      Randy inventory: {:fire 12, :paper 6, :scissors 9, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 11, :water 10, :rock 11}
+;;; Sandy plays :water  -  Randy plays :fire
+;;;      Randy inventory: {:fire 11, :paper 6, :scissors 9, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 11, :water 10, :rock 11}
+;;; Randy plays :rock  -  Sandy plays :scissors
+;;;      Randy inventory: {:fire 12, :paper 6, :scissors 9, :water 10, :rock 10}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 10, :rock 12}
+;;; Randy plays :water  -  Sandy plays :fire
+;;;      Randy inventory: {:fire 12, :paper 6, :scissors 9, :water 10, :rock 10}
+;;;      Sandy inventory: {:fire 12, :paper 10, :scissors 10, :water 10, :rock 12}
+;;; Randy plays :paper  -  Sandy plays :rock
+;;;      Randy inventory: {:fire 12, :paper 5, :scissors 9, :water 10, :rock 11}
+;;;      Sandy inventory: {:fire 12, :paper 11, :scissors 10, :water 10, :rock 11}
+;;; Sandy plays :paper  -  Randy plays :water
+;;;      Randy inventory: {:fire 12, :paper 5, :scissors 9, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 12, :paper 11, :scissors 10, :water 10, :rock 11}
+;;; Sandy plays :rock  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 12, :paper 5, :scissors 8, :water 9, :rock 12}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 10, :water 10, :rock 10}
+;;; Randy plays :rock  -  Sandy plays :scissors
+;;;      Randy inventory: {:fire 13, :paper 5, :scissors 8, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 9, :water 10, :rock 11}
+;;; Sandy plays :rock  -  Randy plays :fire
+;;;      Randy inventory: {:fire 12, :paper 5, :scissors 9, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 9, :water 10, :rock 11}
+;;; Sandy plays :water  -  Randy plays :fire
+;;;      Randy inventory: {:fire 11, :paper 5, :scissors 9, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 9, :water 10, :rock 11}
+;;; Sandy plays :water  -  Randy plays :fire
+;;;      Randy inventory: {:fire 10, :paper 5, :scissors 9, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 9, :water 10, :rock 11}
+;;; Randy plays :paper  -  Sandy plays :fire
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 9, :water 9, :rock 11}
+;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 10, :rock 11}
+;;; Randy plays :rock  -  Sandy plays :paper
+;;;      Randy inventory: {:fire 10, :paper 5, :scissors 9, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 9, :water 10, :rock 12}
+;;; Sandy plays :water  -  Randy plays :water
+;;;      Randy inventory: {:fire 10, :paper 5, :scissors 9, :water 10, :rock 10}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 9, :water 9, :rock 12}
+;;; Randy plays :water  -  Sandy plays :paper
+;;;      Randy inventory: {:fire 10, :paper 5, :scissors 9, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 9, :water 9, :rock 12}
+;;; Randy plays :scissors  -  Sandy plays :fire
+;;;      Randy inventory: {:fire 10, :paper 5, :scissors 10, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 9, :water 9, :rock 12}
+;;; Sandy plays :paper  -  Randy plays :paper
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 10, :water 9, :rock 10}
+;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 9, :rock 12}
+;;; Sandy plays :water  -  Randy plays :water
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 10, :water 8, :rock 10}
+;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 10, :rock 12}
+;;; Randy plays :rock  -  Sandy plays :water
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 10, :water 8, :rock 9}
+;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 11, :rock 12}
+;;; Sandy plays :paper  -  Randy plays :water
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 10, :water 7, :rock 9}
+;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 11, :rock 12}
+;;; Sandy plays :water  -  Randy plays :water
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 10, :water 6, :rock 9}
+;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 12, :rock 12}
+;;; Randy plays :rock  -  Sandy plays :water
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 10, :water 6, :rock 8}
+;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 13, :rock 12}
+;;; Sandy plays :water  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 9, :water 7, :rock 8}
+;;;      Sandy inventory: {:fire 14, :paper 11, :scissors 9, :water 12, :rock 13}
+;;; Sandy plays :fire  -  Randy plays :rock
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 9, :water 7, :rock 8}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 10, :water 12, :rock 13}
+;;; Randy plays :water  -  Sandy plays :rock
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 9, :water 8, :rock 8}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 10, :water 12, :rock 12}
+;;; Sandy plays :rock  -  Randy plays :water
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 9, :water 9, :rock 8}
+;;;      Sandy inventory: {:fire 13, :paper 11, :scissors 10, :water 12, :rock 11}
+;;; Randy plays :fire  -  Sandy plays :paper
+;;;      Randy inventory: {:fire 11, :paper 4, :scissors 9, :water 9, :rock 8}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 12, :rock 11}
+;;; Sandy plays :water  -  Randy plays :paper
+;;;      Randy inventory: {:fire 11, :paper 4, :scissors 9, :water 9, :rock 8}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 11, :rock 11}
+;;; Randy plays :scissors  -  Sandy plays :water
+;;;      Randy inventory: {:fire 11, :paper 4, :scissors 8, :water 10, :rock 8}
+;;;      Sandy inventory: {:fire 13, :paper 10, :scissors 10, :water 10, :rock 12}
+;;; Randy plays :fire  -  Sandy plays :fire
+;;;      Randy inventory: {:fire 10, :paper 4, :scissors 8, :water 10, :rock 8}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 10, :water 10, :rock 12}
+;;; Sandy plays :scissors  -  Randy plays :rock
+;;;      Randy inventory: {:fire 11, :paper 4, :scissors 8, :water 10, :rock 7}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 9, :water 10, :rock 13}
+;;; Sandy plays :rock  -  Randy plays :rock
+;;;      Randy inventory: {:fire 11, :paper 4, :scissors 8, :water 10, :rock 6}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 9, :water 10, :rock 14}
+;;; Sandy plays :water  -  Randy plays :water
+;;;      Randy inventory: {:fire 11, :paper 4, :scissors 8, :water 9, :rock 6}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 9, :water 11, :rock 14}
+;;; Randy plays :paper  -  Sandy plays :scissors
+;;;      Randy inventory: {:fire 11, :paper 5, :scissors 8, :water 9, :rock 6}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 9, :water 11, :rock 14}
+;;; Randy plays :water  -  Sandy plays :rock
+;;;      Randy inventory: {:fire 11, :paper 5, :scissors 8, :water 10, :rock 6}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 9, :water 11, :rock 13}
+;;; Randy plays :water  -  Sandy plays :scissors
+;;;      Randy inventory: {:fire 11, :paper 5, :scissors 8, :water 9, :rock 7}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 8, :water 12, :rock 13}
+;;; Sandy plays :scissors  -  Randy plays :rock
+;;;      Randy inventory: {:fire 12, :paper 5, :scissors 8, :water 9, :rock 6}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 7, :water 12, :rock 14}
+;;; Sandy plays :fire  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 12, :paper 5, :scissors 9, :water 9, :rock 6}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 7, :water 12, :rock 14}
+;;; Sandy plays :scissors  -  Randy plays :paper
+;;;      Randy inventory: {:fire 12, :paper 6, :scissors 9, :water 9, :rock 6}
+;;;      Sandy inventory: {:fire 14, :paper 10, :scissors 7, :water 12, :rock 14}
+;;; Sandy plays :paper  -  Randy plays :fire
+;;;      Randy inventory: {:fire 13, :paper 6, :scissors 9, :water 9, :rock 6}
+;;;      Sandy inventory: {:fire 14, :paper 9, :scissors 7, :water 12, :rock 14}
+;;; Sandy plays :rock  -  Randy plays :rock
+;;;      Randy inventory: {:fire 13, :paper 6, :scissors 9, :water 9, :rock 7}
+;;;      Sandy inventory: {:fire 14, :paper 9, :scissors 7, :water 12, :rock 13}
+;;; Randy plays :rock  -  Sandy plays :rock
+;;;      Randy inventory: {:fire 13, :paper 6, :scissors 9, :water 9, :rock 8}
+;;;      Sandy inventory: {:fire 14, :paper 9, :scissors 7, :water 12, :rock 12}
+;;; Sandy plays :water  -  Randy plays :scissors
+;;;      Randy inventory: {:fire 13, :paper 6, :scissors 8, :water 10, :rock 8}
+;;;      Sandy inventory: {:fire 14, :paper 9, :scissors 7, :water 11, :rock 13}
 ;;; 
 ;; <-
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Sandy&quot;</span>","value":"\"Sandy\""}],"value":"[:name \"Sandy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>3.9749213828703582</span>","value":"3.9749213828703582"}],"value":"[:deviance 3.9749213828703582]"}],"value":"{:name \"Sandy\", :deviance 3.9749213828703582}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:name \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>4.03732584763727</span>","value":"4.03732584763727"}],"value":"[:deviance 4.03732584763727]"}],"value":"{:name \"Randy\", :deviance 4.03732584763727}"}],"value":"[{:name \"Sandy\", :deviance 3.9749213828703582} {:name \"Randy\", :deviance 4.03732584763727}]"}
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:name \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>2.6457513110645907</span>","value":"2.6457513110645907"}],"value":"[:deviance 2.6457513110645907]"}],"value":"{:name \"Randy\", :deviance 2.6457513110645907}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Sandy&quot;</span>","value":"\"Sandy\""}],"value":"[:name \"Sandy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>2.8635642126552705</span>","value":"2.8635642126552705"}],"value":"[:deviance 2.8635642126552705]"}],"value":"{:name \"Sandy\", :deviance 2.8635642126552705}"}],"value":"[{:name \"Randy\", :deviance 2.6457513110645907} {:name \"Sandy\", :deviance 2.8635642126552705}]"}
 ;; <=
 
 ;; **
@@ -399,7 +468,7 @@
                       (player "Wally" water-pf)]))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:name \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>6.268971207462991</span>","value":"6.268971207462991"}],"value":"[:deviance 6.268971207462991]"}],"value":"{:name \"Randy\", :deviance 6.268971207462991}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Rocky&quot;</span>","value":"\"Rocky\""}],"value":"[:name \"Rocky\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>10.963576058932597</span>","value":"10.963576058932597"}],"value":"[:deviance 10.963576058932597]"}],"value":"{:name \"Rocky\", :deviance 10.963576058932597}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Sandy&quot;</span>","value":"\"Sandy\""}],"value":"[:name \"Sandy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>14.53272169966796</span>","value":"14.53272169966796"}],"value":"[:deviance 14.53272169966796]"}],"value":"{:name \"Sandy\", :deviance 14.53272169966796}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Wally&quot;</span>","value":"\"Wally\""}],"value":"[:name \"Wally\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>16.64331697709324</span>","value":"16.64331697709324"}],"value":"[:deviance 16.64331697709324]"}],"value":"{:name \"Wally\", :deviance 16.64331697709324}"}],"value":"[{:name \"Randy\", :deviance 6.268971207462991} {:name \"Rocky\", :deviance 10.963576058932597} {:name \"Sandy\", :deviance 14.53272169966796} {:name \"Wally\", :deviance 16.64331697709324}]"}
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""}],"value":"[:name \"Randy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>10.099504938362077</span>","value":"10.099504938362077"}],"value":"[:deviance 10.099504938362077]"}],"value":"{:name \"Randy\", :deviance 10.099504938362077}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Rocky&quot;</span>","value":"\"Rocky\""}],"value":"[:name \"Rocky\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>12.095453691366853</span>","value":"12.095453691366853"}],"value":"[:deviance 12.095453691366853]"}],"value":"{:name \"Rocky\", :deviance 12.095453691366853}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Sandy&quot;</span>","value":"\"Sandy\""}],"value":"[:name \"Sandy\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>12.095453691366853</span>","value":"12.095453691366853"}],"value":"[:deviance 12.095453691366853]"}],"value":"{:name \"Sandy\", :deviance 12.095453691366853}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:name</span>","value":":name"},{"type":"html","content":"<span class='clj-string'>&quot;Wally&quot;</span>","value":"\"Wally\""}],"value":"[:name \"Wally\"]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:deviance</span>","value":":deviance"},{"type":"html","content":"<span class='clj-double'>21.087911228948208</span>","value":"21.087911228948208"}],"value":"[:deviance 21.087911228948208]"}],"value":"{:name \"Wally\", :deviance 21.087911228948208}"}],"value":"[{:name \"Randy\", :deviance 10.099504938362077} {:name \"Rocky\", :deviance 12.095453691366853} {:name \"Sandy\", :deviance 12.095453691366853} {:name \"Wally\", :deviance 21.087911228948208}]"}
 ;; <=
 
 ;; **
@@ -413,10 +482,10 @@
                               (player "Wally" water-pf)])))
 ;; @@
 ;; ->
-;;; [{:name &quot;Randy&quot;, :deviance 8.955445270895245}
-;;;  {:name &quot;Sandy&quot;, :deviance 9.710818709048171}
-;;;  {:name &quot;Wally&quot;, :deviance 13.989281611290838}
-;;;  {:name &quot;Rocky&quot;, :deviance 16.410362579784763}]
+;;; [{:name &quot;Sandy&quot;, :deviance 10.295630140987}
+;;;  {:name &quot;Randy&quot;, :deviance 15.690761613127643}
+;;;  {:name &quot;Rocky&quot;, :deviance 17.58408371226661}
+;;;  {:name &quot;Wally&quot;, :deviance 19.50128200913981}]
 ;;; 
 ;; <-
 ;; =>
@@ -437,10 +506,11 @@
              (player "Wally" water-pf)
              (player "Margie" majority-pf)
              (player "Minnie" minority-pf)
-             (player "Harry" water-hoarder-pf)])
+             (player "Harry" water-hoarder-pf)
+             (player "Maggy" margie-hater-pf)])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Margie&quot;</span>","value":"\"Margie\""},{"type":"html","content":"<span class='clj-long'>70</span>","value":"70"}],"value":"[\"Margie\" 70]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Minnie&quot;</span>","value":"\"Minnie\""},{"type":"html","content":"<span class='clj-long'>14</span>","value":"14"}],"value":"[\"Minnie\" 14]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Pappy&quot;</span>","value":"\"Pappy\""},{"type":"html","content":"<span class='clj-long'>10</span>","value":"10"}],"value":"[\"Pappy\" 10]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""},{"type":"html","content":"<span class='clj-long'>3</span>","value":"3"}],"value":"[\"Randy\" 3]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Harry&quot;</span>","value":"\"Harry\""},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"[\"Harry\" 2]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Suzy&quot;</span>","value":"\"Suzy\""},{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"}],"value":"[\"Suzy\" 1]"}],"value":"([\"Margie\" 70] [\"Minnie\" 14] [\"Pappy\" 10] [\"Randy\" 3] [\"Harry\" 2] [\"Suzy\" 1])"}
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Margie&quot;</span>","value":"\"Margie\""},{"type":"html","content":"<span class='clj-long'>54</span>","value":"54"}],"value":"[\"Margie\" 54]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Maggy&quot;</span>","value":"\"Maggy\""},{"type":"html","content":"<span class='clj-long'>19</span>","value":"19"}],"value":"[\"Maggy\" 19]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Harry&quot;</span>","value":"\"Harry\""},{"type":"html","content":"<span class='clj-long'>7</span>","value":"7"}],"value":"[\"Harry\" 7]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""},{"type":"html","content":"<span class='clj-long'>7</span>","value":"7"}],"value":"[\"Randy\" 7]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Pappy&quot;</span>","value":"\"Pappy\""},{"type":"html","content":"<span class='clj-long'>6</span>","value":"6"}],"value":"[\"Pappy\" 6]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Minnie&quot;</span>","value":"\"Minnie\""},{"type":"html","content":"<span class='clj-long'>4</span>","value":"4"}],"value":"[\"Minnie\" 4]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Wally&quot;</span>","value":"\"Wally\""},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"[\"Wally\" 2]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Fido&quot;</span>","value":"\"Fido\""},{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"}],"value":"[\"Fido\" 1]"}],"value":"([\"Margie\" 54] [\"Maggy\" 19] [\"Harry\" 7] [\"Randy\" 7] [\"Pappy\" 6] [\"Minnie\" 4] [\"Wally\" 2] [\"Fido\" 1])"}
 ;; <=
 
 ;; **
@@ -450,10 +520,29 @@
 ;; @@
 (tournament 100
             [(player "Margie" majority-pf)
-             (player "Pappy" paper-pf)])
+             (player "Pappy" paper-pf)
+             (player "Harry" water-hoarder-pf)])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Margie&quot;</span>","value":"\"Margie\""},{"type":"html","content":"<span class='clj-long'>51</span>","value":"51"}],"value":"[\"Margie\" 51]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Pappy&quot;</span>","value":"\"Pappy\""},{"type":"html","content":"<span class='clj-long'>28</span>","value":"28"}],"value":"[\"Pappy\" 28]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Nobody&quot;</span>","value":"\"Nobody\""},{"type":"html","content":"<span class='clj-long'>21</span>","value":"21"}],"value":"[\"Nobody\" 21]"}],"value":"([\"Margie\" 51] [\"Pappy\" 28] [\"Nobody\" 21])"}
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Margie&quot;</span>","value":"\"Margie\""},{"type":"html","content":"<span class='clj-long'>91</span>","value":"91"}],"value":"[\"Margie\" 91]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Pappy&quot;</span>","value":"\"Pappy\""},{"type":"html","content":"<span class='clj-long'>7</span>","value":"7"}],"value":"[\"Pappy\" 7]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Harry&quot;</span>","value":"\"Harry\""},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"[\"Harry\" 2]"}],"value":"([\"Margie\" 91] [\"Pappy\" 7] [\"Harry\" 2])"}
+;; <=
+
+;; @@
+(tournament 100
+            [(player "Margie" majority-pf)
+             (player "Maggy" margie-hater-pf)])
+;; @@
+;; =>
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Maggy&quot;</span>","value":"\"Maggy\""},{"type":"html","content":"<span class='clj-long'>89</span>","value":"89"}],"value":"[\"Maggy\" 89]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Margie&quot;</span>","value":"\"Margie\""},{"type":"html","content":"<span class='clj-long'>11</span>","value":"11"}],"value":"[\"Margie\" 11]"}],"value":"([\"Maggy\" 89] [\"Margie\" 11])"}
+;; <=
+
+;; @@
+(tournament 100
+            [(player "Fido" fire-pf)
+             (player "Maggy" margie-hater-pf)])
+;; @@
+;; =>
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Fido&quot;</span>","value":"\"Fido\""},{"type":"html","content":"<span class='clj-long'>75</span>","value":"75"}],"value":"[\"Fido\" 75]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Maggy&quot;</span>","value":"\"Maggy\""},{"type":"html","content":"<span class='clj-long'>25</span>","value":"25"}],"value":"[\"Maggy\" 25]"}],"value":"([\"Fido\" 75] [\"Maggy\" 25])"}
 ;; <=
 
 ;; **
@@ -468,7 +557,7 @@
              (player "Suzy" scissors-pf)])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Suzy&quot;</span>","value":"\"Suzy\""},{"type":"html","content":"<span class='clj-long'>75</span>","value":"75"}],"value":"[\"Suzy\" 75]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Rocky&quot;</span>","value":"\"Rocky\""},{"type":"html","content":"<span class='clj-long'>25</span>","value":"25"}],"value":"[\"Rocky\" 25]"}],"value":"([\"Suzy\" 75] [\"Rocky\" 25])"}
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Suzy&quot;</span>","value":"\"Suzy\""},{"type":"html","content":"<span class='clj-long'>69</span>","value":"69"}],"value":"[\"Suzy\" 69]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Rocky&quot;</span>","value":"\"Rocky\""},{"type":"html","content":"<span class='clj-long'>30</span>","value":"30"}],"value":"[\"Rocky\" 30]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Nobody&quot;</span>","value":"\"Nobody\""},{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"}],"value":"[\"Nobody\" 1]"}],"value":"([\"Suzy\" 69] [\"Rocky\" 30] [\"Nobody\" 1])"}
 ;; <=
 
 ;; **
@@ -484,7 +573,7 @@
              (player "Suzy" scissors-pf)])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""},{"type":"html","content":"<span class='clj-long'>37</span>","value":"37"}],"value":"[\"Randy\" 37]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Trudy&quot;</span>","value":"\"Trudy\""},{"type":"html","content":"<span class='clj-long'>36</span>","value":"36"}],"value":"[\"Trudy\" 36]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Rudy&quot;</span>","value":"\"Rudy\""},{"type":"html","content":"<span class='clj-long'>27</span>","value":"27"}],"value":"[\"Rudy\" 27]"}],"value":"([\"Randy\" 37] [\"Trudy\" 36] [\"Rudy\" 27])"}
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""},{"type":"html","content":"<span class='clj-long'>36</span>","value":"36"}],"value":"[\"Randy\" 36]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Trudy&quot;</span>","value":"\"Trudy\""},{"type":"html","content":"<span class='clj-long'>35</span>","value":"35"}],"value":"[\"Trudy\" 35]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Rudy&quot;</span>","value":"\"Rudy\""},{"type":"html","content":"<span class='clj-long'>29</span>","value":"29"}],"value":"[\"Rudy\" 29]"}],"value":"([\"Randy\" 36] [\"Trudy\" 35] [\"Rudy\" 29])"}
 ;; <=
 
 ;; **
@@ -503,7 +592,7 @@
                                                (player "Minnie" minority-pf)]))))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:fire</span>","value":":fire"},{"type":"html","content":"<span class='clj-long'>687</span>","value":"687"}],"value":"[:fire 687]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:paper</span>","value":":paper"},{"type":"html","content":"<span class='clj-long'>470</span>","value":"470"}],"value":"[:paper 470]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:scissors</span>","value":":scissors"},{"type":"html","content":"<span class='clj-long'>716</span>","value":"716"}],"value":"[:scissors 716]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:water</span>","value":":water"},{"type":"html","content":"<span class='clj-long'>302</span>","value":"302"}],"value":"[:water 302]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:rock</span>","value":":rock"},{"type":"html","content":"<span class='clj-long'>409</span>","value":"409"}],"value":"[:rock 409]"}],"value":"{:fire 687, :paper 470, :scissors 716, :water 302, :rock 409}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:fire</span>","value":":fire"},{"type":"html","content":"<span class='clj-long'>606</span>","value":"606"}],"value":"[:fire 606]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:paper</span>","value":":paper"},{"type":"html","content":"<span class='clj-long'>525</span>","value":"525"}],"value":"[:paper 525]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:scissors</span>","value":":scissors"},{"type":"html","content":"<span class='clj-long'>604</span>","value":"604"}],"value":"[:scissors 604]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:water</span>","value":":water"},{"type":"html","content":"<span class='clj-long'>265</span>","value":"265"}],"value":"[:water 265]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:rock</span>","value":":rock"},{"type":"html","content":"<span class='clj-long'>412</span>","value":"412"}],"value":"[:rock 412]"}],"value":"{:fire 606, :paper 525, :scissors 604, :water 265, :rock 412}"}
 ;; <=
 
 ;; **
@@ -530,105 +619,105 @@
 ;; @@
 ;; ->
 ;;; Randy vs Randy ([Randy 100])
-;;; Randy vs Rocky ([Randy 65] [Rocky 35])
-;;; Randy vs Pappy ([Pappy 79] [Randy 21])
-;;; Randy vs Suzy ([Suzy 58] [Randy 42])
-;;; Randy vs Fido ([Randy 60] [Fido 40])
-;;; Randy vs Wally ([Wally 58] [Randy 42])
-;;; Randy vs Margie ([Margie 100])
-;;; Randy vs Minnie ([Randy 63] [Minnie 37])
+;;; Randy vs Rocky ([Randy 60] [Rocky 40])
+;;; Randy vs Pappy ([Pappy 73] [Randy 27])
+;;; Randy vs Suzy ([Suzy 66] [Randy 34])
+;;; Randy vs Fido ([Randy 67] [Fido 33])
+;;; Randy vs Wally ([Randy 59] [Wally 40] [Nobody 1])
+;;; Randy vs Margie ([Margie 99] [Randy 1])
+;;; Randy vs Minnie ([Randy 58] [Minnie 42])
 ;;; Randy vs Harry ([Harry 67] [Randy 33])
-;;; Randy vs Maggy ([Maggy 52] [Randy 48])
+;;; Randy vs Maggy ([Maggy 66] [Randy 34])
 ;;; Rocky vs Randy ([Randy 61] [Rocky 39])
-;;; Rocky vs Rocky ([Nobody 100])
-;;; Rocky vs Pappy ([Pappy 51] [Rocky 48] [Nobody 1])
-;;; Rocky vs Suzy ([Suzy 65] [Rocky 35])
-;;; Rocky vs Fido ([Rocky 67] [Fido 33])
-;;; Rocky vs Wally ([Wally 77] [Rocky 22] [Nobody 1])
-;;; Rocky vs Margie ([Nobody 72] [Margie 27] [Rocky 1])
-;;; Rocky vs Minnie ([Rocky 55] [Minnie 45])
-;;; Rocky vs Harry ([Harry 82] [Rocky 18])
-;;; Rocky vs Maggy ([Maggy 76] [Rocky 24])
-;;; Pappy vs Randy ([Pappy 73] [Randy 27])
-;;; Pappy vs Rocky ([Pappy 55] [Rocky 45])
-;;; Pappy vs Pappy ([Nobody 100])
+;;; Rocky vs Rocky ([Rocky 55] [Nobody 45])
+;;; Rocky vs Pappy ([Pappy 61] [Rocky 38] [Nobody 1])
+;;; Rocky vs Suzy ([Suzy 71] [Rocky 29])
+;;; Rocky vs Fido ([Rocky 75] [Fido 24] [Nobody 1])
+;;; Rocky vs Wally ([Wally 71] [Rocky 28] [Nobody 1])
+;;; Rocky vs Margie ([Margie 91] [Rocky 9])
+;;; Rocky vs Minnie ([Rocky 57] [Minnie 42] [Nobody 1])
+;;; Rocky vs Harry ([Harry 79] [Rocky 21])
+;;; Rocky vs Maggy ([Maggy 79] [Rocky 21])
+;;; Pappy vs Randy ([Pappy 78] [Randy 22])
+;;; Pappy vs Rocky ([Pappy 53] [Rocky 47])
+;;; Pappy vs Pappy ([Pappy 58] [Nobody 42])
 ;;; Pappy vs Suzy ([Suzy 100])
-;;; Pappy vs Fido ([Pappy 66] [Fido 34])
-;;; Pappy vs Wally ([Pappy 80] [Wally 20])
-;;; Pappy vs Margie ([Margie 44] [Pappy 31] [Nobody 25])
-;;; Pappy vs Minnie ([Pappy 75] [Minnie 25])
-;;; Pappy vs Harry ([Pappy 63] [Harry 37])
-;;; Pappy vs Maggy ([Maggy 53] [Pappy 47])
-;;; Suzy vs Randy ([Suzy 64] [Randy 36])
-;;; Suzy vs Rocky ([Suzy 66] [Rocky 34])
+;;; Pappy vs Fido ([Pappy 63] [Fido 37])
+;;; Pappy vs Wally ([Pappy 79] [Wally 21])
+;;; Pappy vs Margie ([Margie 91] [Pappy 9])
+;;; Pappy vs Minnie ([Pappy 68] [Minnie 32])
+;;; Pappy vs Harry ([Pappy 52] [Harry 48])
+;;; Pappy vs Maggy ([Maggy 66] [Pappy 34])
+;;; Suzy vs Randy ([Suzy 62] [Randy 38])
+;;; Suzy vs Rocky ([Suzy 68] [Rocky 32])
 ;;; Suzy vs Pappy ([Suzy 100])
-;;; Suzy vs Suzy ([Nobody 100])
+;;; Suzy vs Suzy ([Suzy 63] [Nobody 37])
 ;;; Suzy vs Fido ([Fido 100])
-;;; Suzy vs Wally ([Suzy 53] [Wally 47])
-;;; Suzy vs Margie ([Margie 66] [Suzy 34])
-;;; Suzy vs Minnie ([Minnie 52] [Suzy 48])
-;;; Suzy vs Harry ([Suzy 95] [Harry 5])
+;;; Suzy vs Wally ([Suzy 52] [Wally 47] [Nobody 1])
+;;; Suzy vs Margie ([Margie 71] [Suzy 28] [Nobody 1])
+;;; Suzy vs Minnie ([Suzy 65] [Minnie 35])
+;;; Suzy vs Harry ([Suzy 97] [Harry 3])
 ;;; Suzy vs Maggy ([Maggy 100])
-;;; Fido vs Randy ([Randy 70] [Fido 30])
-;;; Fido vs Rocky ([Rocky 77] [Fido 23])
+;;; Fido vs Randy ([Randy 71] [Fido 29])
+;;; Fido vs Rocky ([Rocky 82] [Fido 17] [Nobody 1])
 ;;; Fido vs Pappy ([Pappy 55] [Fido 45])
 ;;; Fido vs Suzy ([Fido 100])
-;;; Fido vs Fido ([Nobody 100])
-;;; Fido vs Wally ([Fido 55] [Wally 45])
-;;; Fido vs Margie ([Fido 99] [Margie 1])
-;;; Fido vs Minnie ([Minnie 69] [Fido 30] [Nobody 1])
+;;; Fido vs Fido ([Fido 59] [Nobody 41])
+;;; Fido vs Wally ([Wally 50] [Fido 50])
+;;; Fido vs Margie ([Fido 100])
+;;; Fido vs Minnie ([Minnie 55] [Fido 45])
 ;;; Fido vs Harry ([Harry 61] [Fido 39])
-;;; Fido vs Maggy ([Maggy 55] [Fido 45])
-;;; Wally vs Randy ([Wally 51] [Randy 49])
-;;; Wally vs Rocky ([Wally 73] [Rocky 27])
-;;; Wally vs Pappy ([Pappy 72] [Wally 28])
-;;; Wally vs Suzy ([Suzy 55] [Wally 44] [Nobody 1])
-;;; Wally vs Fido ([Wally 52] [Fido 48])
-;;; Wally vs Wally ([Nobody 100])
-;;; Wally vs Margie ([Margie 38] [Wally 35] [Nobody 27])
-;;; Wally vs Minnie ([Wally 53] [Minnie 47])
-;;; Wally vs Harry ([Harry 57] [Wally 43])
-;;; Wally vs Maggy ([Maggy 59] [Wally 41])
-;;; Margie vs Randy ([Margie 100])
-;;; Margie vs Rocky ([Nobody 70] [Margie 29] [Rocky 1])
-;;; Margie vs Pappy ([Margie 47] [Nobody 28] [Pappy 25])
-;;; Margie vs Suzy ([Margie 66] [Suzy 34])
+;;; Fido vs Maggy ([Fido 80] [Maggy 20])
+;;; Wally vs Randy ([Wally 54] [Randy 46])
+;;; Wally vs Rocky ([Wally 69] [Rocky 29] [Nobody 2])
+;;; Wally vs Pappy ([Pappy 78] [Wally 22])
+;;; Wally vs Suzy ([Suzy 57] [Wally 43])
+;;; Wally vs Fido ([Fido 54] [Wally 46])
+;;; Wally vs Wally ([Wally 58] [Nobody 42])
+;;; Wally vs Margie ([Margie 91] [Wally 9])
+;;; Wally vs Minnie ([Wally 60] [Minnie 38] [Nobody 2])
+;;; Wally vs Harry ([Harry 66] [Wally 34])
+;;; Wally vs Maggy ([Maggy 63] [Wally 37])
+;;; Margie vs Randy ([Margie 98] [Randy 2])
+;;; Margie vs Rocky ([Margie 92] [Rocky 6] [Nobody 2])
+;;; Margie vs Pappy ([Margie 95] [Pappy 5])
+;;; Margie vs Suzy ([Margie 71] [Suzy 29])
 ;;; Margie vs Fido ([Fido 98] [Margie 2])
-;;; Margie vs Wally ([Wally 43] [Margie 31] [Nobody 26])
-;;; Margie vs Margie ([Margie 91] [Nobody 9])
-;;; Margie vs Minnie ([Margie 61] [Nobody 23] [Minnie 16])
-;;; Margie vs Harry ([Margie 98] [Harry 2])
-;;; Margie vs Maggy ([Maggy 91] [Margie 9])
-;;; Minnie vs Randy ([Randy 55] [Minnie 45])
-;;; Minnie vs Rocky ([Rocky 53] [Minnie 47])
+;;; Margie vs Wally ([Margie 89] [Wally 10] [Nobody 1])
+;;; Margie vs Margie ([Margie 97] [Nobody 3])
+;;; Margie vs Minnie ([Margie 81] [Minnie 16] [Nobody 3])
+;;; Margie vs Harry ([Margie 93] [Harry 7])
+;;; Margie vs Maggy ([Maggy 95] [Margie 5])
+;;; Minnie vs Randy ([Randy 53] [Minnie 47])
+;;; Minnie vs Rocky ([Rocky 54] [Minnie 46])
 ;;; Minnie vs Pappy ([Pappy 65] [Minnie 35])
-;;; Minnie vs Suzy ([Suzy 58] [Minnie 41] [Nobody 1])
-;;; Minnie vs Fido ([Minnie 73] [Fido 27])
+;;; Minnie vs Suzy ([Suzy 65] [Minnie 35])
+;;; Minnie vs Fido ([Minnie 54] [Fido 46])
 ;;; Minnie vs Wally ([Wally 61] [Minnie 39])
-;;; Minnie vs Margie ([Margie 64] [Nobody 24] [Minnie 12])
-;;; Minnie vs Minnie ([Minnie 100])
-;;; Minnie vs Harry ([Harry 78] [Minnie 22])
-;;; Minnie vs Maggy ([Maggy 62] [Minnie 37] [Nobody 1])
-;;; Harry vs Randy ([Harry 70] [Randy 30])
-;;; Harry vs Rocky ([Harry 82] [Rocky 18])
-;;; Harry vs Pappy ([Pappy 58] [Harry 42])
-;;; Harry vs Suzy ([Suzy 99] [Harry 1])
-;;; Harry vs Fido ([Harry 66] [Fido 34])
-;;; Harry vs Wally ([Harry 70] [Wally 30])
-;;; Harry vs Margie ([Margie 99] [Harry 1])
-;;; Harry vs Minnie ([Harry 73] [Minnie 27])
+;;; Minnie vs Margie ([Margie 76] [Minnie 23] [Nobody 1])
+;;; Minnie vs Minnie ([Minnie 99] [Nobody 1])
+;;; Minnie vs Harry ([Harry 81] [Minnie 19])
+;;; Minnie vs Maggy ([Maggy 64] [Minnie 36])
+;;; Harry vs Randy ([Harry 72] [Randy 28])
+;;; Harry vs Rocky ([Harry 85] [Rocky 14] [Nobody 1])
+;;; Harry vs Pappy ([Pappy 51] [Harry 48] [Nobody 1])
+;;; Harry vs Suzy ([Suzy 94] [Harry 6])
+;;; Harry vs Fido ([Harry 55] [Fido 45])
+;;; Harry vs Wally ([Harry 61] [Wally 39])
+;;; Harry vs Margie ([Margie 92] [Harry 8])
+;;; Harry vs Minnie ([Harry 72] [Minnie 28])
 ;;; Harry vs Harry ([Harry 100])
-;;; Harry vs Maggy ([Maggy 55] [Harry 45])
-;;; Maggy vs Randy ([Maggy 52] [Randy 48])
-;;; Maggy vs Rocky ([Maggy 84] [Rocky 16])
-;;; Maggy vs Pappy ([Maggy 54] [Pappy 46])
+;;; Harry vs Maggy ([Maggy 71] [Harry 29])
+;;; Maggy vs Randy ([Maggy 69] [Randy 31])
+;;; Maggy vs Rocky ([Maggy 82] [Rocky 18])
+;;; Maggy vs Pappy ([Maggy 67] [Pappy 32] [Nobody 1])
 ;;; Maggy vs Suzy ([Maggy 100])
-;;; Maggy vs Fido ([Fido 63] [Maggy 37])
-;;; Maggy vs Wally ([Maggy 52] [Wally 48])
+;;; Maggy vs Fido ([Fido 73] [Maggy 27])
+;;; Maggy vs Wally ([Maggy 61] [Wally 39])
 ;;; Maggy vs Margie ([Maggy 94] [Margie 6])
-;;; Maggy vs Minnie ([Maggy 57] [Minnie 42] [Nobody 1])
-;;; Maggy vs Harry ([Maggy 57] [Harry 43])
-;;; Maggy vs Maggy ([Maggy 96] [Nobody 4])
+;;; Maggy vs Minnie ([Maggy 65] [Minnie 34] [Nobody 1])
+;;; Maggy vs Harry ([Maggy 60] [Harry 40])
+;;; Maggy vs Maggy ([Maggy 100])
 ;;; 
 ;; <-
 ;; =>
@@ -648,7 +737,7 @@
              (player "Maggy" margie-hater-pf)])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Maggy&quot;</span>","value":"\"Maggy\""},{"type":"html","content":"<span class='clj-long'>92</span>","value":"92"}],"value":"[\"Maggy\" 92]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Margie&quot;</span>","value":"\"Margie\""},{"type":"html","content":"<span class='clj-long'>8</span>","value":"8"}],"value":"[\"Margie\" 8]"}],"value":"([\"Maggy\" 92] [\"Margie\" 8])"}
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Maggy&quot;</span>","value":"\"Maggy\""},{"type":"html","content":"<span class='clj-long'>89</span>","value":"89"}],"value":"[\"Maggy\" 89]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Margie&quot;</span>","value":"\"Margie\""},{"type":"html","content":"<span class='clj-long'>11</span>","value":"11"}],"value":"[\"Margie\" 11]"}],"value":"([\"Maggy\" 89] [\"Margie\" 11])"}
 ;; <=
 
 ;; @@
@@ -657,7 +746,7 @@
              (player "Naggy" maggie-hater-pf)])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Naggy&quot;</span>","value":"\"Naggy\""},{"type":"html","content":"<span class='clj-long'>76</span>","value":"76"}],"value":"[\"Naggy\" 76]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Maggy&quot;</span>","value":"\"Maggy\""},{"type":"html","content":"<span class='clj-long'>24</span>","value":"24"}],"value":"[\"Maggy\" 24]"}],"value":"([\"Naggy\" 76] [\"Maggy\" 24])"}
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Naggy&quot;</span>","value":"\"Naggy\""},{"type":"html","content":"<span class='clj-long'>74</span>","value":"74"}],"value":"[\"Naggy\" 74]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Maggy&quot;</span>","value":"\"Maggy\""},{"type":"html","content":"<span class='clj-long'>26</span>","value":"26"}],"value":"[\"Maggy\" 26]"}],"value":"([\"Naggy\" 74] [\"Maggy\" 26])"}
 ;; <=
 
 ;; **
@@ -672,7 +761,7 @@
              (player "Maggy" margie-hater-pf)])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Maggy&quot;</span>","value":"\"Maggy\""},{"type":"html","content":"<span class='clj-long'>63</span>","value":"63"}],"value":"[\"Maggy\" 63]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""},{"type":"html","content":"<span class='clj-long'>16</span>","value":"16"}],"value":"[\"Randy\" 16]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Harry&quot;</span>","value":"\"Harry\""},{"type":"html","content":"<span class='clj-long'>11</span>","value":"11"}],"value":"[\"Harry\" 11]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Margie&quot;</span>","value":"\"Margie\""},{"type":"html","content":"<span class='clj-long'>10</span>","value":"10"}],"value":"[\"Margie\" 10]"}],"value":"([\"Maggy\" 63] [\"Randy\" 16] [\"Harry\" 11] [\"Margie\" 10])"}
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Maggy&quot;</span>","value":"\"Maggy\""},{"type":"html","content":"<span class='clj-long'>48</span>","value":"48"}],"value":"[\"Maggy\" 48]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Harry&quot;</span>","value":"\"Harry\""},{"type":"html","content":"<span class='clj-long'>20</span>","value":"20"}],"value":"[\"Harry\" 20]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Randy&quot;</span>","value":"\"Randy\""},{"type":"html","content":"<span class='clj-long'>16</span>","value":"16"}],"value":"[\"Randy\" 16]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;Margie&quot;</span>","value":"\"Margie\""},{"type":"html","content":"<span class='clj-long'>16</span>","value":"16"}],"value":"[\"Margie\" 16]"}],"value":"([\"Maggy\" 48] [\"Harry\" 20] [\"Randy\" 16] [\"Margie\" 16])"}
 ;; <=
 
 ;; @@
