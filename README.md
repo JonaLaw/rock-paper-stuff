@@ -6,8 +6,6 @@ By Lee Spector
 
 ***This is work in progress. Expect changes.***
 
-***Check out the debt-free branch for a version in which one cannot go into debt, which may replace this current master branch.***
-
 ## About
 
 Rock Paper Stuff is a game designed for artificial intelligence experiments and education. 
@@ -29,7 +27,7 @@ Players start with five times as many of each of these as there are players. For
 
 Players can only play what they have. If they try to play something that they don't have, then one of the kinds of things that they do have will be chosen randomly, and a thing of that kind will be played. If they run out of everything, then they die, participate in no more trades, and can't win. (The dead are perfectly balanced, but losers nonetheless!)
 
-A player's balance is measured as the standard deviation of its amounts of stuff, with a deviation of zero meaning that the player is perfectly balanced, and higher deviations being worse. Intuitively, the more spread out the amounts are, the higher the deviation will be, and the worse the player is doing. Technically, the deviation is calculated by taking all of a player's amounts of stuff, averaging them, looking at how far each is from the average, squaring each of those distances, averaging those squares, and then taking the square root of that average.
+A player's balance is measured as the standard deviation of its amounts of stuff, with a deviation of zero meaning that the player is perfectly balanced, and higher deviations being worse. Intuitively, the more spread out the amounts are, the higher the deviation will be, and the worse the player is doing. Technically, the deviation is calculated by taking all of a player's amounts of stuff, averaging them, looking at how far each is from the average, squaring each of those distances, averaging those squares, and then taking the square root of that average. That's a little complicated, but it's a standard way of measuring how spread out a set of numbers is, and the game does it for you.
 
 The number of trades in a game is the number of possible pairings times 100. For a two-player game, this is 100 trades. For a three-player game, 300 trades. For a four-player game, 600 trades. In general, the number of trades is *100n(n-1)/2* where *n* is the number of players. Because pairings are indepedently random, different players may participate in somewhat different numbers of trades, and different pairings may occur somewhat different numbers of times.
 
