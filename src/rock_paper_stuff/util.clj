@@ -41,6 +41,12 @@
       1000000000000000
       (stdev amounts))))
 
+(defn summary
+  [player]
+  {:name (:name player)
+   :deviance (:deviance player)
+   :inventory (:inventory player)})
+
 (defn player
   "Retuns a Rock Paper Stuff player with the provided name and player function.
   A player is a map of: 
@@ -59,4 +65,3 @@
    :memory {}
    :skin {}
    :alive false})
-

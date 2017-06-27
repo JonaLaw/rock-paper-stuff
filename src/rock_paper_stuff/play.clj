@@ -45,13 +45,15 @@
       :alive (some #(pos? (second %)) new-inventory))))
 
 (defn play-game
-  "Plays a game of Rock Paper Stuff among the provided players. An argument
-  of :print following the collection of players will cause information about
-  each trade to be printed. Returns a map of the :winner (which is the :name
-  of the highest-scoring player, or Nobody if there is no single winner),
-  and the collection of final :players in full detail."
-  [players & additional-args]
-  (let [num-players (count players)]
+  "Plays a game of Rock Paper Stuff among the provided players. Returns 
+  a map of the :winner (which is the :name of the highest-scoring player,
+  or Nobody if there is no single winner), the collection of final
+  :players in full detail, and the entire :global-history of the run."
+  [players]
+  (let [num-players (count players)
+        inventories (fn [players]
+                      (into {} (for [p players] 
+                                 {(:name p) (:inventory p)})))]
     (loop [;;; play for n(n-1)/2 steps, where n is the number of players
             steps (* 100 (/ (* num-players (dec num-players)) 2))
             ;; players get as much of each kind of stuff as there are players
@@ -63,11 +65,7 @@
                               :alive true))
                           players)
             ;; the global-history is initially empty
-            global-history []]
-      ;; print inventories when appropriate
-      (when (some #{:print} additional-args)
-        (doseq [p (sort-by :name players)]
-          (println "    "(:name p) "inventory:" (:inventory p))))
+            global-history [(inventories players)]]
       (let [alive (filter :alive players)]
         (if (or (zero? steps)
                 (< (count alive) 2))
@@ -99,10 +97,6 @@
                  ;; ensure plays are valid
                  play1 (u/legitimize play1 player1)
                  play2 (u/legitimize play2 player2)
-                 ;; print when apropriate
-                 _ (when (some #{:print} additional-args)
-                     (println (:name player1) "plays" play1 " - "
-                              (:name player2) "plays" play2))
                  ;; determine the outcomes of the trade
                  [products1 products2] (outcome play1 play2)
                  ;; update the players
@@ -116,9 +110,10 @@
                                      [new-player1 new-player2])]
             (recur (dec steps)
                    new-players
-                   (conj global-history
-                         (into {} (for [p new-players] 
-                                    {(:name p) (:inventory p)}))))))))))
+                   (-> global-history
+                       (conj {:player (:name player1) :plays play1})
+                       (conj {:player (:name player2) :plays play2})
+                       (conj (inventories new-players))))))))))
 
 (defn tournament
   "Plays the specified number of games of Rock Paper Stuff among the provided
@@ -128,5 +123,3 @@
   [games players]
   (let [results (repeatedly games #(play-game players))]
     (reverse (sort-by val (frequencies (map :winner results))))))
-
-
