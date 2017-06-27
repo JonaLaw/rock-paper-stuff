@@ -1,5 +1,5 @@
 (ns rock-paper-stuff.user
-  (:use [rock-paper-stuff util play player-functions]
+  (:use [rock-paper-stuff util play]
         [clojure.pprint]))
 
 ;; Include your player functions and other definitions here.

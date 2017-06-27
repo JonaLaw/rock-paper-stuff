@@ -6,25 +6,25 @@
   the player of play2 will receive from the trade, respectively."
   [play1 play2]
   (if (= play1 play2)
-    [[play2] [play1]]
+    (rand-nth [[[play1 play2] []] [[] [play1 play2]]])
     (let [inverse #(reverse (outcome play2 play1))]
       (case play1
         :rock (case play2
                 :paper [[:paper][:rock]]
-                :scissors [[:scissors :fire] [:rock]]
-                :fire [[:fire] [:scissors]] 
+                :scissors [[:fire] [:rock]]
+                :fire [[:rock] [:scissors]] 
                 :water [[] [:water :water]]) 
         :paper (case play2
-                 :scissors [[:scissors] [:paper :paper]]
-                 :fire [[:fire] [:fire]]
-                 :water [[:paper :water] []]
+                 :scissors [[:paper :paper][:scissors]]
+                 :fire [[] [:fire :fire]]
+                 :water [[:paper] []]
                  (inverse))
         :scissors (case play2
-                    :fire [[:fire] [:scissors]]
+                    :fire [[:scissors :scissors] [:fire]]
                     :water [[:water] [:rock]]
                     (inverse))
         :fire (case play2
-                :water [[] [:water :water]]
+                :water [[] [:water]]
                 (inverse))
         :water (inverse)))))
 
@@ -41,18 +41,19 @@
                       :play play 
                       :opponent-play opponent-play})
       :memory (merge (:memory player) memory)
-      :skin (merge (:skin player) skin))))
+      :skin (merge (:skin player) skin)
+      :alive (some #(pos? (second %)) new-inventory))))
 
 (defn play-game
-  "Plays a game of Rock Paper Stuff among the provided players. An argument
-  of :print following the collection of players will cause information about
-  each trade to be printed. Returns a map of the :winner (which is the :name
-  of the highest-scoring player, or Nobody if there is no single winner),
-  a :summary (a vector of the players at the game, but showing only each
-  player's :name, :water, and :score), and the collection of final :players
-  in full detail."
-  [players & additional-args]
-  (let [num-players (count players)]
+  "Plays a game of Rock Paper Stuff among the provided players. Returns 
+  a map of the :winner (which is the :name of the highest-scoring player,
+  or Nobody if there is no single winner), the collection of final
+  :players in full detail, and the entire :global-history of the run."
+  [players]
+  (let [num-players (count players)
+        inventories (fn [players]
+                      (into {} (for [p players] 
+                                 {(:name p) (:inventory p)})))]
     (loop [;;; play for n(n-1)/2 steps, where n is the number of players
             steps (* 100 (/ (* num-players (dec num-players)) 2))
             ;; players get as much of each kind of stuff as there are players
@@ -60,62 +61,59 @@
                             (assoc p :inventory 
                               (apply hash-map 
                                      (interleave u/stuff 
-                                                 (repeat num-players)))))
+                                                 (repeat (* 5 num-players))))
+                              :alive true))
                           players)
             ;; the global-history is initially empty
-            global-history []]
-      (if (zero? steps)
-        ;; game over, return a report
-        (let [sorted (reverse (sort-by u/score players))]
-          {:winner (if (apply = (map u/score (take 2 sorted)))
-                     "Nobody"
-                     (:name (first sorted)))
-           :summary (mapv #(do {:name (:name %) 
-                                :water (:water (:inventory %))
-                                :score (u/score %)})
-                          sorted)
-           :players sorted
-           :global-history global-history})
-        ;; otherwise, two players play
-        (let [;;; pick 2 players
-               shuffled (shuffle players)
-               [player1 player2] (take 2 shuffled)
-               ;; call player functions to get plays, memories, and skins
-               {play1 :play memory1 :memory skin1 :skin} 
-               , ((:function player1) 
-                  player1 
-                  (assoc (:skin player2) 
-                    :name (:name player2)
-                    :inventory (:inventory player2)))
-               {play2 :play memory2 :memory skin2 :skin} 
-               , ((:function player2) 
-                  player2 
-                  (assoc (:skin player1) 
-                    :name (:name player1)
-                    :inventory (:inventory player1)))
-               ;; ensure plays are valid
-               play1 (u/legitimize play1)
-               play2 (u/legitimize play2)
-               ;; print when apropriate
-               _ (when (some #{:print} additional-args)
-                   (println (:name player1) "plays" play1 " - "
-                            (:name player2) "plays" play2))
-               ;; determine the outcomes of the trade
-               [products1 products2] (outcome play1 play2)
-               ;; update the players
-               new-player1 (update-player 
-                             player1 play1 memory1 skin1 products1 
-                             player2 play2)
-               new-player2 (update-player 
-                             player2 play2 memory2 skin2 products2 
-                             player1 play1)
-               new-players (concat (drop 2 shuffled)
-                                   [new-player1 new-player2])]
-          (recur (dec steps)
-                 new-players
-                 (conj global-history
-                       (into {} (for [p new-players] 
-                                  {(:name p) (:inventory p)})))))))))
+            global-history [(inventories players)]]
+      (let [alive (filter :alive players)]
+        (if (or (zero? steps)
+                (< (count alive) 2))
+          ;; game over, return a report
+          (let [dead (filter #(not (:alive %)) players)
+                sorted (concat (sort-by u/deviance alive) dead)]
+            {:winner (if (apply = (map u/deviance (take 2 sorted)))
+                       "Nobody"
+                       (:name (first sorted)))
+             :players (mapv #(assoc % :deviance (u/deviance %)) sorted)
+             :global-history global-history})
+          ;; otherwise, two live players play
+          (let [;;; pick 2 live players
+                 shuffled (shuffle alive)
+                 [player1 player2] (take 2 shuffled)
+                 ;; call player functions to get plays, memories, and skins
+                 {play1 :play memory1 :memory skin1 :skin} 
+                 , ((:function player1) 
+                    player1 
+                    (assoc (:skin player2) 
+                      :name (:name player2)
+                      :inventory (:inventory player2)))
+                 {play2 :play memory2 :memory skin2 :skin} 
+                 , ((:function player2) 
+                    player2 
+                    (assoc (:skin player1) 
+                      :name (:name player1)
+                      :inventory (:inventory player1)))
+                 ;; ensure plays are valid
+                 play1 (u/legitimize play1 player1)
+                 play2 (u/legitimize play2 player2)
+                 ;; determine the outcomes of the trade
+                 [products1 products2] (outcome play1 play2)
+                 ;; update the players
+                 new-player1 (update-player 
+                               player1 play1 memory1 skin1 products1 
+                               player2 play2)
+                 new-player2 (update-player 
+                               player2 play2 memory2 skin2 products2 
+                               player1 play1)
+                 new-players (concat (drop 2 shuffled)
+                                     [new-player1 new-player2])]
+            (recur (dec steps)
+                   new-players
+                   (-> global-history
+                       (conj {:player (:name player1) :plays play1})
+                       (conj {:player (:name player2) :plays play2})
+                       (conj (inventories new-players))))))))))
 
 (defn tournament
   "Plays the specified number of games of Rock Paper Stuff among the provided
@@ -125,4 +123,3 @@
   [games players]
   (let [results (repeatedly games #(play-game players))]
     (reverse (sort-by val (frequencies (map :winner results))))))
-
