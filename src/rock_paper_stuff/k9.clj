@@ -1,7 +1,7 @@
 ;; gorilla-repl.fileformat = 1
 ;; from: https://github.com/gigasquid/k9
 ;; @@
-(ns rock_paper_stuff.k9
+(ns rock-paper-stuff.k9
   (:require [clojure.core.matrix :refer :all]
             [clojure.core.matrix.operators :refer :all]))
 ;; @@
