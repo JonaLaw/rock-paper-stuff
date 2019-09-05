@@ -1,55 +1,52 @@
 ;; gorilla-repl.fileformat = 1
 
 ;; @@
-(ns my-stuff.neural_net
-  (:use ;[rock_paper_stuff.k9]
-        [my-stuff util play]))
+(ns rock-paper-stuff.neural_net2
+  (:use [rock-paper-stuff k9 util play]
+        [clojure.pprint]))
 ;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}
-;; <=
 
 ;; @@
-(def a-hand {:rock 1, :paper 2, :scissors 5, :fire 5, :water 5})
+;example hand
+(def a-hand {:rock 0, :paper 2, :scissors 5, :fire 6, :water 7})
 ;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;my-stuff.neural_net/a-hand</span>","value":"#'my-stuff.neural_net/a-hand"}
-;; <=
 
 ;; @@
-(defn val-fractions [inv]
+(defn val-fractions
+  "used to get the fractions of a maps contents"
+  [inv]
   (let [values (map last inv)
         total (reduce + values)]
     (if (zero? total)
-      	values
-    	(map #(/ % total) values))))
+      values
+      (map #(if (zero? %)
+               0
+               (/ % total))
+           values))))
 
-;(defn inventory-percentages [inv]
+;I wonder which is faster?
+;(defn val-fractions [inv]
 ;    (map #(/ % (reduce + (map last inv)))
 ;         (map last inv)))
 
 (val-fractions a-hand)
 ;; @@
-;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-ratio'>1/18</span>","value":"1/18"},{"type":"html","content":"<span class='clj-ratio'>1/9</span>","value":"1/9"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"}],"value":"(1/18 1/9 5/18 5/18 5/18)"}
-;; <=
 
 ;; @@
 (defn consolidateInvs
-  "takes in two inventories and consolidates them"
+  "takes in two inventories and consolidates them
+  used as the neural networks input data"
   [inv1 inv2]
   (into [] (concat (val-fractions inv1)
                    (val-fractions inv2))))
 
 (consolidateInvs a-hand a-hand)
 ;; @@
-;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-ratio'>1/18</span>","value":"1/18"},{"type":"html","content":"<span class='clj-ratio'>1/9</span>","value":"1/9"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"},{"type":"html","content":"<span class='clj-ratio'>1/18</span>","value":"1/18"},{"type":"html","content":"<span class='clj-ratio'>1/9</span>","value":"1/9"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"}],"value":"[1/18 1/9 5/18 5/18 5/18 1/18 1/9 5/18 5/18 5/18]"}
-;; <=
 
 ;; @@
 (defn key-fractions
-  "https://clojuredocs.org/clojure.core/reduce#example-588a9031e4b01f4add58fe32"
+  "used to get a similar list as val-fractions but with keys so they can be referenced
+  https://clojuredocs.org/clojure.core/reduce#example-588a9031e4b01f4add58fe32"
   [inv]
   (let [total (reduce + (map last inv))]
     (if (zero? total)
@@ -59,124 +56,116 @@
               {} ;first value for p
               inv))))
 
-(key-fractions a-hand)
-;; @@
-;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:rock</span>","value":":rock"},{"type":"html","content":"<span class='clj-ratio'>1/18</span>","value":"1/18"}],"value":"[:rock 1/18]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:paper</span>","value":":paper"},{"type":"html","content":"<span class='clj-ratio'>1/9</span>","value":"1/9"}],"value":"[:paper 1/9]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:scissors</span>","value":":scissors"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"}],"value":"[:scissors 5/18]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:fire</span>","value":":fire"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"}],"value":"[:fire 5/18]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:water</span>","value":":water"},{"type":"html","content":"<span class='clj-ratio'>5/18</span>","value":"5/18"}],"value":"[:water 5/18]"}],"value":"{:rock 1/18, :paper 1/9, :scissors 5/18, :fire 5/18, :water 5/18}"}
-;; <=
-
+(def a-hand-key-frac (key-fractions a-hand))
+a-hand-key-frac
 ;; @@
 
-(comment
+;; @@
+(defn getRating
+  "used to get the rating of a previous hand play 
+  general purpose use, isn't final rating"
+  [handKey resultKeys ourKeyFractions]
+  (let [handFrac (handKey ourKeyFractions)]
+    ;if we get nothing, still reward getting rid of hands we have too many of
+    (if (zero? (count resultKeys))
+      ;finiky, leaving it low
+      (* handFrac (/ 1 5))
+      (let [resultFrac ((first resultKeys) ourKeyFractions)]
+        ;if we get the same hand as we played
+        (* (if (= handKey (first resultKeys))
+             ;reward a bit if we have enough to play but not if we have too many already
+             (if (and (> (/ 3 10) handFrac)
+                      (< (/ 3 20) handFrac))
+               (- handFrac (* resultFrac (/ 3 4)))
+               0)
+             ;else rating is equal to what we played - what we got
+             ;get rid of hands we have a lot of and aim for hands we have few of
+             (- handFrac resultFrac))
+           ;reward getting multiples
+           (if (= 2 (count resultKeys))
+             (/ 5 4)
+             1))))))
+;; @@
+
+;; @@
+(def testKey :scissors)
+(def testResult (first (outcome testKey :fire)))
+
+(getRating testKey testResult a-hand-key-frac)
+;; @@
+
+;; @@
+;explanation in the function declaration below this one
 (defn getTargetData
-  "takes in the previous plays details and it's outcome and
-  returns what the NN should've gotten for the last play to /win/"
-  [ourLastInv opponentsLastPlay]
-  (let [ourKeyFractions (key-fractions ourLastInv)]
-    ;(into [] (val-fractions 
-    (into {} (for [eachKey (keys ourLastInv)]
-               (if (or (zero? (eachKey ourLastInv))
-                       (= eachKey opponentsLastPlay))
-                 {eachKey -1}
-                 (let [ourGain (first (outcome eachKey
-                                               opponentsLastPlay))]
-                   (do (println eachKey ourGain)
-                     (let [multiplier (if (< 1 (count ourGain))
-                                        (/ 13 10)
-                                        (count ourGain))
-                           ;if we don't lose our hand then get the fraction of the hand that we get
-                           ;else assign fraction of the hand that we played
-                           ourGainKeyFrac (if-not (zero? multiplier)
-                                            ((first ourGain) ourKeyFractions)
-                                            (/ (eachKey ourKeyFractions) 2))]
-                       (if (zero? multiplier)
-                         (if (< (/ 1 5) ourGainKeyFrac)
-                           {eachKey ourGainKeyFrac}
-                           {eachKey 0})
-                         (if (> (/ 1 5) ourGainKeyFrac)
-                           {eachKey (* (- (eachKey ourKeyFractions) ourGainKeyFrac)
-                                       multiplier)}
-                           {eachKey 0}))))))))))
-)
-
-
-
-(defn getTargetData
-  "takes in the previous plays details and it's outcome and
-  returns what the NN should've gotten for the last play to /win/"
   [ourLastInv opponentsLastPlay]
   (let [ourKeyFractions (key-fractions ourLastInv)]
     (into [] (val-fractions (into {} (for [eachKey (keys ourLastInv)]
                                        (if (or (zero? (eachKey ourLastInv))
                                                (= eachKey opponentsLastPlay))
-                                         {eachKey -1}
-                                         (let [ourGain (first (outcome eachKey
-                                                                       opponentsLastPlay))]
-                                           (do (println eachKey ourGain)
-                                             (let [multiplier (if (< 1 (count ourGain))
-                                                                (/ 13 10)
-                                                                1)
-                                                   ;if we don't lose our hand then get the fraction of the hand that we get
-                                                   ;else assign fraction of the hand that we played
-                                                   ourGainKeyFrac (if-not (zero? (count ourGain))
-                                                                    ((first ourGain) ourKeyFractions)
-                                                                    (/ (eachKey ourKeyFractions) 2))]
-                                               {eachKey (* (eachKey ourKeyFractions)
-                                                           (- 1 (* ourGainKeyFrac
-                                                                   multiplier)))}))))))))))
-
-;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;my-stuff.neural_net/getTargetData</span>","value":"#'my-stuff.neural_net/getTargetData"}
-;; <=
-
-;; @@
-(eachKey ourKeyFractions) higher-better
-(ourGainKeyFrac) lower-better
-
-:paper 10 get :rock 3
-10/20 * (1-3/20)
-(* (eachKey ourKeyFractions) (- 1 ourGainKeyFrac))
-
-if both low
-- don't do
-if both high
-- consider
-if have high gain low
-- do
-if have low gain high
-- don't do
+                                         {eachKey 0}
+                                         (let [ourGain (first (outcome eachKey opponentsLastPlay))]
+                                           {eachKey (let [rating (getRating eachKey
+                                                                            ourGain
+                                                                            ourKeyFractions)]
+                                                      (if (neg? rating)
+                                                        0
+                                                        rating))}))))))))
 ;; @@
 
 ;; @@
-(getTargetData {:rock 1 :paper 1 :scissors 2 :fire 6 :water 4} :water)
+(defn getTargetDataExample
+  "takes in the previous plays details and it's outcome and
+  returns what the NN should've gotten for the last play to 'win'"
+  [ourLastInv opponentsLastPlay]
+  (let [ourKeyFractions (key-fractions ourLastInv)]
+    ;into keymap - results from looping through the keys
+    (into {} (for [eachKey (keys ourLastInv)]
+               ;don't try to play something we don't have or what they played
+               (if (or (zero? (eachKey ourLastInv))
+                       (= eachKey opponentsLastPlay))
+                 (do (println eachKey "can't play")
+                   ;this key shall never be picked
+                   {eachKey 0})
+                 ;get what we gain for playing this key
+                 (let [ourGain (first (outcome eachKey opponentsLastPlay))]
+                   ;assign this key a rating
+                   {eachKey (float (let [rating (getRating eachKey
+                                                    ourGain
+                                                    ourKeyFractions)]
+                              (do (println eachKey "got" ourGain "with a rating of" rating)
+                                ;if the rating is negative or zero (convert 0N to int)
+                                (if (neg? rating)
+                                  ;this key shall never be picked
+                                  0
+                                  rating))))}))))))
 ;; @@
-;; ->
-;;; :rock []
-;;; :paper [:paper]
-;;; :scissors [:water]
-;;; :fire []
-;;; 
-;; <-
-;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-ratio'>-27/167</span>","value":"-27/167"},{"type":"html","content":"<span class='clj-ratio'>-26/167</span>","value":"-26/167"},{"type":"html","content":"<span class='clj-ratio'>-40/167</span>","value":"-40/167"},{"type":"html","content":"<span class='clj-ratio'>-132/167</span>","value":"-132/167"},{"type":"html","content":"<span class='clj-ratio'>392/167</span>","value":"392/167"}],"value":"[-27/167 -26/167 -40/167 -132/167 392/167]"}
-;; <=
 
 ;; @@
-(outcome :rock :paper)
+(getTargetData a-hand :fire)
 ;; @@
-;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:paper</span>","value":":paper"}],"value":"[:paper]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:rock</span>","value":":rock"}],"value":"[:rock]"}],"value":"[[:paper] [:rock]]"}
-;; <=
+
+;; @@
+(getTargetDataExample a-hand :fire)
+;; @@
+
+;; @@
+;redefine example hand
+(def a-hand {:rock 10, :paper 16, :scissors 12, :fire 10, :water 11})
+;; @@
+
+;; @@
+(getTargetData a-hand :water)
+;; @@
 
 ;; @@
 (defn getLearningRate
+  "learning rate based on the fraction of the played hand's inventory count and then reduced
+  this is not ideal for sure"
   [inv played]
-  (/ (played (key-fractions inv)) 3))
+  ;(/ (played (key-fractions inv)) 3))
+  ;it sure wasn't
+  0.2)
 ;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;my-stuff.neural_net/getLearningRate</span>","value":"#'my-stuff.neural_net/getLearningRate"}
-;; <=
 
 ;; @@
 (defn neuralNetPlay
@@ -184,7 +173,7 @@ if have low gain high
   translates the result into a hand to play, returning it"
   [inputData neuralNetwork]
   (let [output (ff inputData neuralNetwork)]
-    ;;it works, decently too
+    ;it works, decently too
     (key (apply max-key val {:rock (nth output 0),
                              :paper (nth output 1),
                              :scissors (nth output 2),
@@ -196,52 +185,59 @@ if have low gain high
 (defn neural-pf
   "brainpower"
   [self other-skin]
+  ;checking to see if the game is just starting
   (if-not (nil? (last (:history self)))
+    ;the input, used to get target data, the new nn
     (let [currentInvs (consolidateInvs (:inventory self)
                                        (:inventory other-skin))
           opponentsLastPlay (:opponent-play (last (:history self)))
           newNN (train-data (:nn (:memory self))
-                            [(:lastInvs (:memory self))
+                            [[(:lastInvs (:memory self))
                              (getTargetData (:ourLastInv (:memory self))
-                                            opponentsLastPlay)]
+                                            opponentsLastPlay)]]
                             (getLearningRate (:theirLastInv (:memory self))
-                                             opponentsLastPlay))]
-      {:play (neuralNetPlay currentInvs newNN)
-       :memory {:nn newNN
-                :lastInvs currentInvs
-                :ourLastInv (:inventory self)
-                :theirLastInv (:inventory self)}})
-    ;;fixing?
+                                             opponentsLastPlay))
+          toPlay (neuralNetPlay currentInvs newNN)]
+      ;(do (print toPlay)
+        {:play toPlay
+         :memory {:nn newNN
+                  :lastInvs currentInvs
+                  :ourLastInv (:inventory self)
+                  :theirLastInv (:inventory other-skin)}});)
+    ;fixing?
     {:play (rand-nth [:rock :paper :scissors :fire :water])
      :memory {:nn (construct-network 10 10 5)
               :lastInvs (consolidateInvs (:inventory self)
-                                         (:inventory other-skin))}}))
+                                         (:inventory other-skin))
+              :ourLastInv (:inventory self)
+              :theirLastInv (:inventory other-skin)}}))
 ;; @@
 
 ;; @@
-{:name Rocky, :play :paper, :opponent-play :rock}
-{:rock 0, :paper 1, :scissors 2, :fire 3, :water 4} :paper
-{:rock 4, :paper 3, :scissors 2, :fire 1, :water 0} :rock
-swaps
+(defn rock-pf
+  "A player function that always plays :rock."
+  [self other-skin]
+  {:play :rock})
+;; @@
 
+;; @@
+(defn maximum-pf
+  "A player function that plays one of the kinds of stuff of which the 
+  player has most."
+  [self other-skin]
+  {:play (let [max-val (apply max (vals (:inventory self)))
+               candidates (filter (fn [[k v]] (= v max-val)) (:inventory self))]
+           (first (first (shuffle candidates))))})
+;; @@
 
-what we got
-what we should've played to get what we wanted
+;; @@
+(pprint
+  (map summary
+       (:players (play-game [(player "Maxi" maximum-pf)
+                             (player "Skynet" neural-pf)]))))
+;; @@
 
-wanted = the hand we could've got that was the least
-
-{:rock 2/3, :paper 1/3, :scissors 1/3, :fire 0, :water 0}
-
-(* (+ 1 percentage))
-
-(for [i (range 0 (count ))]
-  (eachKey cd))
-(if (zero? (keyAt ourLastInv))
-  0
-  (if (outcome keyAt (:opponent-play lastPlay))
-  (if (== keyAt (:opponent-play lastPlay))
-    (/ 1 3)
-   ()
-
-gets a hand that is part of the lower half
+;; @@
+(:winner (play-game [(player "Maxi" rock-pf)
+                     (player "Skynet" neural-pf)]))
 ;; @@
